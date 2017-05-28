@@ -35,5 +35,10 @@ dependencies {
 
     def butterknifeVersion = '8.6.0'
     compile "com.jakewharton:butterknife:$butterknifeVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+//    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+}
+
+kapt {
+    generateStubs = true
 }

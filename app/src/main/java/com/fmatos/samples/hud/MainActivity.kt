@@ -11,21 +11,19 @@ import butterknife.ButterKnife
 class MainActivity : AppCompatActivity() {
 
     private var TAG: String = MainActivity::class.java.simpleName
+
+    @BindView(R.id.clock_text) @JvmField
+    var clockText: TextView? = null
+
     private var handler: Handler? = null
-
-    @BindView(R.id.clock_text)
-    protected var clockText: TextView? = null
-
-    var text: String = ""
-    var textBlink: Boolean = true
+    private var text: String = ""
+    private var textBlink: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        ButterKnife.bind(this)
-
-        clockText = findViewById(R.id.clock_text)
+        ButterKnife.bind(this)
 
         handler = Handler(mainLooper)
 
