@@ -3,12 +3,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 'android-O'
+    buildToolsVersion "26.0.0-rc2"
     defaultConfig {
         applicationId "com.fmatos.samples.hud"
-        minSdkVersion 23
-        targetSdkVersion 25
+        minSdkVersion 'O'
+        targetSdkVersion 'O'
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -23,7 +23,7 @@ android {
 
 dependencies {
 
-    def supportLibraryVersion = '25.3.1'
+    def supportLibraryVersion = '26.0.0-beta1' //'25.3.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
