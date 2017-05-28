@@ -7,8 +7,8 @@ android {
     buildToolsVersion "26.0.0-rc2"
     defaultConfig {
         applicationId "com.fmatos.samples.hud"
-        minSdkVersion 'O'
-        targetSdkVersion 'O'
+        minSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
