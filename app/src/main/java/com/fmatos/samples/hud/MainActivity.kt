@@ -4,16 +4,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private var TAG: String = MainActivity::class.java.simpleName
-
-    @BindView(R.id.clock_text) @JvmField
-    var clockText: TextView? = null
 
     private var handler: Handler? = null
     private var text: String = ""
@@ -23,7 +18,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ButterKnife.bind(this)
 
         handler = Handler(mainLooper)
 
@@ -45,8 +39,7 @@ class MainActivity : AppCompatActivity() {
             textOutput = textOutput.replace(':', ' ')
         }
 
-        clockText?.text = textOutput
-
+        clock_text.text = textOutput
 
         Log.d(TAG,"Message = " + textOutput)
     }

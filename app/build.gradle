@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 'android-O'
@@ -33,12 +34,4 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
 
-    def butterknifeVersion = '8.6.0'
-    compile "com.jakewharton:butterknife:$butterknifeVersion"
-//    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
-    kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
-}
-
-kapt {
-    generateStubs = true
 }
