@@ -7,6 +7,7 @@ import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
 import android.util.Log
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
@@ -29,6 +30,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         handler = Handler(mainLooper)
+
+        Glide.with(this)
+                .load("https://s-media-cache-ak0.pinimg.com/originals/28/47/ed/2847edeab41b3d90a849c68340b5be3a.jpg")
+                .centerCrop()
+                .error(R.drawable.rocket_diamonds)
+                .into(background_img);
 
         updateScreen()
     }

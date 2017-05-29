@@ -1,37 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
     tools:context="com.fmatos.samples.hud.MainActivity">
 
+    <ImageView
+        android:id="@+id/background_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:src="@drawable/rocket_diamonds"
+        />
 
-    <TextView
-        android:id="@+id/ip_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="20dp"
-        tools:text="1.1.1.1" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparentGray"
+        />
 
-    <TextView
-        android:padding="10dp"
-        android:id="@+id/clock_date_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/dseg7classic"
-        android:textSize="40dp"
-        tools:text="24/5" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/clock_time_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/dseg7classic"
-        android:padding="10dp"
-        android:textSize="120dp"
-        tools:text="!7:46" />
+        <TextView
+            android:id="@+id/ip_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="20dp"
+            tools:text="1.1.1.1" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/clock_date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:fontFamily="@font/dseg7classic"
+            android:padding="10dp"
+            android:textSize="40dp"
+            tools:text="24/5" />
+
+        <TextView
+            android:id="@+id/clock_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:fontFamily="@font/dseg7classic"
+            android:padding="10dp"
+            android:textSize="120dp"
+            tools:text="!7:46 PM" />
+    </LinearLayout>
+</RelativeLayout>
