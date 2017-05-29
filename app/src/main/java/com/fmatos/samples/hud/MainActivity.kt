@@ -8,13 +8,14 @@ import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
 
 
 class MainActivity : AppCompatActivity() {
 
     private var TAG: String = MainActivity::class.java.simpleName
+    private val INTERVAL_1_SECOND_MS: Long = 1000
 
     private var handler: Handler? = null
     private var time: String = ""
@@ -34,33 +35,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateScreen() {
 
-        handler!!.postDelayed(this::updateScreen, 1000)
+        handler!!.postDelayed(this::updateScreen, INTERVAL_1_SECOND_MS)
 
         updateModel()
         textBlink = !textBlink
 
-        var textOutput: String
+        var timeView: String = time
 
-        textOutput = time.replace(' ', '!')
+//        timeView = time.replace(' ', '!')
 
         if (textBlink) {
-            textOutput = textOutput.replace(':', ' ')
+            timeView = timeView.replace(':', ' ')
         }
 
-        clock_time_text.text = textOutput
         clock_date_text.text = date
+
+        clock_time_text.text = timeView
+
         ip_text.text = ip
 
-        Log.d(TAG,"Message = " + textOutput)
+        Log.d(TAG, "Message = " + timeView)
     }
 
     private fun updateModel() {
 
-        var localTime = LocalTime.now()
-        time = localTime.toString("HH:mm")
+        val dateTime = DateTime.now().toDateTime(DateTimeZone.forOffsetHours(-3))
 
-        var localDate = LocalDate.now()
-        date = localDate.toString("dd/MM/yyyy")
+        time = dateTime.toString("h:mm a")
+        date = dateTime.toString("EEEEE, dd MMM yyyy")
 
         getWifiIp()
     }
@@ -70,7 +72,6 @@ class MainActivity : AppCompatActivity() {
         val wifiInfo = wifiMgr.connectionInfo
         ip = wifiInfo.ssid
 
-        ip += "\n"
         ip += Formatter.formatIpAddress(wifiInfo.ipAddress)
 
 //        var host = InetAddress.getLocalHost() // uses network code, can't call on main thread

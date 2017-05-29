@@ -7,8 +7,17 @@
     android:orientation="vertical"
     tools:context="com.fmatos.samples.hud.MainActivity">
 
+
     <TextView
-        android:padding="20dp"
+        android:id="@+id/ip_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="20dp"
+        tools:text="1.1.1.1" />
+
+    <TextView
+        android:padding="10dp"
         android:id="@+id/clock_date_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,19 +26,12 @@
         tools:text="24/5" />
 
     <TextView
-        android:padding="20dp"
         android:id="@+id/clock_time_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/dseg7classic"
-        tools:text="!7:46"
-        android:textSize="100dp" />
+        android:padding="10dp"
+        android:textSize="120dp"
+        tools:text="!7:46" />
 
-    <TextView
-        android:id="@+id/ip_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="20dp"
-        tools:text="1.1.1.1"/>
 </LinearLayout>
