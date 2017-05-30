@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
+import org.joda.time.format.DateTimeFormat
+import java.time.format.DateTimeFormatter
 
 
 class MainActivity : AppCompatActivity() {
@@ -68,8 +70,9 @@ class MainActivity : AppCompatActivity() {
 
         val dateTime = DateTime.now().toDateTime(DateTimeZone.forOffsetHours(-3))
 
-        time = dateTime.toString("h:mm a")
-        date = dateTime.toString("EEEEE, dd MMM yyyy")
+        val locale = java.util.Locale("es", "AR")
+        time = DateTimeFormat.forPattern("h:mm a").withLocale(locale).print(dateTime)
+        date = DateTimeFormat.forPattern("EEEEE, dd MMMM yyyy").withLocale(locale).print(dateTime)
 
         getWifiIp()
     }
