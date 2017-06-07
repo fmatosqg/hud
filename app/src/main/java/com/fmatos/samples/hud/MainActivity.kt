@@ -68,10 +68,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateModel() {
 
-        val dateTime = DateTime.now().toDateTime(DateTimeZone.forOffsetHours(-3))
+//        val dateTime = DateTime.now().toDateTime(DateTimeZone.forOffsetHours(-3))
+//        val locale = java.util.Locale("es", "AR")
+        val dateTime = DateTime.now().toDateTime(DateTimeZone.forOffsetHours(+10))
+        val locale = java.util.Locale("en", "AU")
 
-        val locale = java.util.Locale("es", "AR")
-        time = DateTimeFormat.forPattern("h:mm a").withLocale(locale).print(dateTime)
+//        time = DateTimeFormat.forPattern("h:mm a").withLocale(locale).print(dateTime)
+        time = DateTimeFormat.forPattern("h:mm").withLocale(locale).print(dateTime)
         date = DateTimeFormat.forPattern("EEEEE, dd MMMM yyyy").withLocale(locale).print(dateTime)
 
         getWifiIp()

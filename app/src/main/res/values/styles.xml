@@ -5,10 +5,10 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/gray</item>
         <item name="colorPrimaryDark">@color/gray</item>
-        <item name="colorAccent">@color/lightGreen</item>
+        <item name="colorAccent">@color/lightRed</item>
         <item name="android:background">@color/black</item>
-        <item name="android:textColor">@color/darkGreen</item>
-        <item name="android:textColorSecondary">@color/lightGreen</item>
+        <item name="android:textColor">@color/darkRed</item>
+        <item name="android:textColorSecondary">@color/lightRed</item>
     </style>
 
 </resources>

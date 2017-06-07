@@ -28,6 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="40dp"
         >
 
         <LinearLayout
@@ -64,8 +65,8 @@
                 android:background="@color/transparent"
                 android:fontFamily="@font/dseg7classic"
                 android:paddingTop="10dp"
-                android:textSize="140dp"
-                tools:text="!7:46 PM" />
+                android:textSize="220dp"
+                tools:text="!7:46" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>
