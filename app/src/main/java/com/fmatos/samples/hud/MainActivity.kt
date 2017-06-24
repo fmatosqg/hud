@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
-import java.time.format.DateTimeFormatter
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private var date: String = ""
     private var ip: String = ""
     private var textBlink: Boolean = true
+    private var test: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -63,6 +63,8 @@ class MainActivity : AppCompatActivity() {
 
         ip_text.text = ip
 
+        test_text.text = test
+
         Log.d(TAG, "Message = " + timeView)
     }
 
@@ -77,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         time = DateTimeFormat.forPattern("h:mm").withLocale(locale).print(dateTime)
         date = DateTimeFormat.forPattern("EEEEE, dd MMMM yyyy").withLocale(locale).print(dateTime)
 
+        test = "testt"
         getWifiIp()
     }
 

@@ -38,6 +38,15 @@
             android:padding="20dp"
             android:gravity="center"
             android:orientation="vertical">
+            <TextView
+                android:id="@+id/test_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:padding="10dp"
+                android:textSize="40sp"
+                android:text="asdas"
+                tools:text="Test" />
 
             <TextView
                 android:id="@+id/ip_text"
@@ -45,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
                 android:textColor="?android:textColorSecondary"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 tools:text="1.1.1.1" />
 
             <TextView
@@ -55,7 +64,7 @@
                 android:background="@color/transparent"
                 android:fontFamily="@font/dseg7classic"
                 android:padding="10dp"
-                android:textSize="40dp"
+                android:textSize="40sp"
                 tools:text="24/5" />
 
             <TextView
@@ -65,8 +74,11 @@
                 android:background="@color/transparent"
                 android:fontFamily="@font/dseg7classic"
                 android:paddingTop="10dp"
-                android:textSize="220dp"
+                android:textSize="220sp"
                 tools:text="!7:46" />
+
+
+
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </android.support.constraint.ConstraintLayout>
