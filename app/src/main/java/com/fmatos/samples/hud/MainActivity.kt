@@ -47,14 +47,17 @@ class MainActivity : AppCompatActivity() {
                 .timeInterval()
                 .subscribeOn(Schedulers.computation())
 
-        clock1Sec
-                .observeOn(Schedulers.computation())
-                .subscribe({ longTimed -> updateModel(longTimed) })
+        disposables.add(
+                clock1Sec
+                        .observeOn(Schedulers.computation())
+                        .subscribe({ longTimed -> updateModel(longTimed) })
+        )
 
-        clock1Sec
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ updateScreen() })
-
+        disposables.add(
+                clock1Sec
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ updateScreen() })
+        )
     }
 
     override fun onDestroy() {
