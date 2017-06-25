@@ -15,10 +15,11 @@ class WallpaperService {
 
         val sampleList = listOf<String>(
                 "https://scontent-amt2-1.cdninstagram.com/t51.2885-15/e35/19428895_1442540705784136_5195084963979984896_n.jpg",
-                "https://scontent-amt2-1.cdninstagram.com/t51.2885-15/e35/c180.0.720.720/19228605_1940749149543021_747073109751758848_n.jpg",
-                "https://scontent-amt2-1.cdninstagram.com/t51.2885-15/e35/c180.0.720.720/19379662_471716563220917_4662535733972566016_n.jpg")
+                "https://scontent-amt2-1.cdninstagram.com/t51.2885-15/e35/c180.0.720.720/19228605_1940749149543021_747073109751758848_n.jpg"
+        )
 
         return sampleList.toObservable()
+                .repeatUntil({false})
 
     }
 }

@@ -12,6 +12,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Timed
 import kotlinx.android.synthetic.main.activity_main.*
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         var wallpaperObserver = WallpaperService().buildObservable()
 
-        var clock1Min = Observable.interval(0, 60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
+        var clock1Min = Observable.interval(0, 10 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
                 .timeInterval()
 
 //        var zipper: BiFunction<in Timed<Long>, in String, out String>
@@ -71,18 +72,18 @@ class MainActivity : AppCompatActivity() {
 
         val urls = Observable
                 .zip(clock1Min, wallpaperObserver, zipper)
+                .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
 
-        disposables.add(urls.subscribe(
-                { url ->
+        disposables.add(urls.subscribeBy(
+                onNext = { url ->
                     Glide.with(this)
                             .load(url)
                             .centerCrop()
                             .error(R.drawable.rocket_diamonds)
-                            .into(background_img);
+                            .into(background_img)
                 },
-                { Log.i(TAG, "Found Error") },
-                { Log.i(TAG, "Found complete") }
+                onComplete = { Log.i(TAG, "Found complete") }
         ))
     }
 
