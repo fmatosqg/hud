@@ -46,7 +46,9 @@
                 android:padding="10dp"
                 android:textSize="40sp"
                 android:text="asdas"
-                tools:text="Test" />
+                android:visibility="gone"
+                tools:text="Test"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/ip_text"
