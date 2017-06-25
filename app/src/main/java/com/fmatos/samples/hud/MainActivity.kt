@@ -7,9 +7,11 @@ import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
 import android.util.Log
 import com.bumptech.glide.Glide
+import com.fmatos.samples.hud.service.WallpaperService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Timed
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,13 +39,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Glide.with(this)
-                .load("https://s-media-cache-ak0.pinimg.com/originals/28/47/ed/2847edeab41b3d90a849c68340b5be3a.jpg")
-                .centerCrop()
-                .error(R.drawable.rocket_diamonds)
-                .into(background_img);
 
-        var clock1Sec = Observable.interval(INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
+        var clock1Sec = Observable.interval(0, INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
                 .timeInterval()
                 .subscribeOn(Schedulers.computation())
 
@@ -58,7 +55,37 @@ class MainActivity : AppCompatActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ updateScreen() })
         )
+
+        addWallpapers()
     }
+
+    private fun addWallpapers() {
+
+        var wallpaperObserver = WallpaperService().buildObservable()
+
+        var clock1Min = Observable.interval(0, 60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
+                .timeInterval()
+
+//        var zipper: BiFunction<in Timed<Long>, in String, out String>
+        var zipper = BiFunction { time: Timed<Long>, url: String -> url }
+
+        val urls = Observable
+                .zip(clock1Min, wallpaperObserver, zipper)
+                .observeOn(AndroidSchedulers.mainThread())
+
+        disposables.add(urls.subscribe(
+                { url ->
+                    Glide.with(this)
+                            .load(url)
+                            .centerCrop()
+                            .error(R.drawable.rocket_diamonds)
+                            .into(background_img);
+                },
+                { Log.i(TAG, "Found Error") },
+                { Log.i(TAG, "Found complete") }
+        ))
+    }
+
 
     override fun onDestroy() {
         disposables.clear()

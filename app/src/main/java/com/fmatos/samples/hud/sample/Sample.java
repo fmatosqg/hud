@@ -1,5 +1,6 @@
 package com.fmatos.samples.hud.sample;
 
+import io.reactivex.functions.BiFunction;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Timed;
 
@@ -10,6 +11,8 @@ import io.reactivex.schedulers.Timed;
 public class Sample {
 
     private void useless() {
+
+        BiFunction<? super Timed<Long>, ? super String, ? extends String> zipper = null;
 
         new DisposableObserver<Timed<Long>>(){
 
