@@ -62,9 +62,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun addWallpapers() {
 
-        var wallpaperObserver = WallpaperService().buildObservable()
+        var wallpaperObserver:Observable<String> = WallpaperService()
+                .buildObservable()
 
-        var clock1Min = Observable.interval(0, 10 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
+        var clock1Min = Observable.interval(0, 60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
                 .timeInterval()
 
 //        var zipper: BiFunction<in Timed<Long>, in String, out String>
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity() {
 
         disposables.add(urls.subscribeBy(
                 onNext = { url ->
+                    Log.i(TAG,"On glide url ${url}")
                     Glide.with(this)
                             .load(url)
                             .centerCrop()
