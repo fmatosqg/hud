@@ -1,10 +1,17 @@
 package com.fmatos.samples.hud.service
 
 import android.util.Log
+import com.fmatos.samples.hud.service.model.amazingwallpapers.AmazingWallpapersService
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.toObservable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.ReplaySubject
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 /**
  * Created by fmatos on 25/06/2017.
@@ -37,6 +44,38 @@ class WallpaperService {
 
     private fun buildList(): List<String> {
 
+        fetchData()
+
         return sampleList
+    }
+
+    private fun fetchData() {
+
+        val retrofit = Retrofit.Builder()
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://amazingdomain.net/")
+                .build()
+
+        val ALBUM_INSTAGRAM_SCOTT_KELBY = "http://instatom.freelancis.net/scottkelby"
+
+        val amazingWallpaperService = retrofit.create(AmazingWallpapersService::class.java)
+        val scottKelbyAlbum = amazingWallpaperService.getAlbum(ALBUM_INSTAGRAM_SCOTT_KELBY)
+
+
+        scottKelbyAlbum.subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
+                .subscribeBy(
+                        onComplete = {
+                            Log.i(TAG,"On album error")
+                        },
+                        onNext = {
+                            album -> Log.i(TAG, "On Album name is " + album.name)
+                        },
+                        onError = {
+                            Log.i(TAG,"On error " + it)
+                        }
+                )
     }
 }
