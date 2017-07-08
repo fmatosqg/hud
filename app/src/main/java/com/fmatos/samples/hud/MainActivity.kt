@@ -1,6 +1,7 @@
 package com.fmatos.samples.hud
 
 import android.content.Context
+import android.graphics.Typeface
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -56,6 +57,15 @@ class MainActivity : AppCompatActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ updateScreen() })
         )
+
+        try {
+            val face = Typeface.createFromAsset(assets,
+                    "fonts/dseg7classic_light.ttf")
+
+            clock_time_text.typeface = face
+        } catch (e: RuntimeException) {
+            Log.e(TAG, "Can't set custom font: ${e.localizedMessage}")
+        }
 
         addWallpapers()
     }
@@ -117,7 +127,6 @@ class MainActivity : AppCompatActivity() {
 
         test_text.text = test
 
-        Log.d(TAG, "Message = " + timeView)
     }
 
     private fun updateModel(longTimed: Timed<Long>) {
@@ -141,9 +150,6 @@ class MainActivity : AppCompatActivity() {
         ip = wifiInfo.ssid
 
         ip += Formatter.formatIpAddress(wifiInfo.ipAddress)
-
-//        var host = InetAddress.getLocalHost() // uses network code, can't call on main thread
-//        ip = host.hostAddress
 
     }
 }
