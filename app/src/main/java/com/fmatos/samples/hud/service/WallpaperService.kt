@@ -6,7 +6,7 @@ import com.fmatos.samples.hud.service.model.amazingwallpapers.AmazingWallpapersS
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.ReplaySubject
 import io.reactivex.subjects.Subject
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -21,26 +21,24 @@ class WallpaperService {
 
     private var TAG: String = WallpaperService::class.java.simpleName
 
+    val subject: Subject<String> = ReplaySubject.create()
+
     fun buildObservable(): Observable<String> {
 
         return buildListObservable()
                 .repeatUntil({false})
-
     }
 
     private fun buildListObservable(): Subject<String> {
 
-        val observableAlbum = fetchData()
-
-        val subject: Subject<String> = BehaviorSubject.create()
-
-
-        observableAlbum
+        fetchData()
                 .observeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribeBy(
+
                         onComplete = {
                             Log.i(TAG, "On album complete")
+                            subject.onComplete()
                         },
                         onNext = {
                             album ->
@@ -54,16 +52,20 @@ class WallpaperService {
                                     }
 
                         },
-                        onError = {
-                            Log.i(TAG, "On error " + it)
+                        onError = { error ->
+                            Log.i(TAG, "On error " + error)
+                            subject.onError(error)
                         }
                 )
+        subject.doOnSubscribe { Log.i(TAG, "On subscribe") }
 
 
         return subject
     }
 
     private fun fetchData(): Observable<Album> {
+
+        Log.i(TAG,"On fetch list")
 
         val retrofit = Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -72,11 +74,14 @@ class WallpaperService {
                 .build()
 
         val ALBUM_INSTAGRAM_SCOTT_KELBY = "http://instatom.freelancis.net/scottkelby"
+        val ALBUM_INSTAGRAM_INSTAGOOD = "http://instatom.freelancis.net/instagood"
 
         val amazingWallpaperService = retrofit.create(AmazingWallpapersService::class.java)
-        val scottKelbyAlbum = amazingWallpaperService.getAlbum(ALBUM_INSTAGRAM_SCOTT_KELBY)
+        val scottKelbyAlbum = amazingWallpaperService.getAlbum(ALBUM_INSTAGRAM_INSTAGOOD)
 
-        return scottKelbyAlbum.subscribeOn(Schedulers.newThread())
+        return scottKelbyAlbum
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
     }
 
 }

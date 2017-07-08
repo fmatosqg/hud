@@ -85,7 +85,9 @@ class MainActivity : AppCompatActivity() {
                             .error(R.drawable.rocket_diamonds)
                             .into(background_img)
                 },
-                onComplete = { Log.i(TAG, "Found complete") }
+                onComplete = { Log.i(TAG, "On glide Found complete") },
+                onError = { Log.i(TAG,"On glide error")}
+
         ))
     }
 
