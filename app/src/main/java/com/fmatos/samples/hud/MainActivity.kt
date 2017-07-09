@@ -1,16 +1,15 @@
 package com.fmatos.samples.hud
 
 import android.content.Context
-import android.graphics.Typeface
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
 import com.bumptech.glide.Glide
+import com.fmatos.samples.hud.service.FontCache
 import com.fmatos.samples.hud.service.WallpaperService
 import com.fmatos.samples.hud.utils.AndroidLogger
 import com.fmatos.samples.hud.utils.dagger.HudApplication
-import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -44,6 +43,9 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit
     var wallpaperService: WallpaperService
 
+    @Inject lateinit
+    var fontCache: FontCache
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -68,10 +70,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         try {
-            val face = Typeface.createFromAsset(assets,
-                    "fonts/dseg7classic_light.ttf")
+            val typeface = fontCache.get("fonts/dseg7classic_light.ttf",this)
 
-            clock_time_text.typeface = face
+            clock_time_text.typeface = typeface
         } catch (e: RuntimeException) {
             androidLogger.e(TAG, "Can't set custom font: %s", e.localizedMessage)
         }

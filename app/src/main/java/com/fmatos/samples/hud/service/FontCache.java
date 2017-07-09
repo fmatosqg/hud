@@ -5,15 +5,22 @@ import android.graphics.Typeface;
 
 import java.util.Hashtable;
 
+import javax.inject.Inject;
+
 /**
  * Created by fmatos on 8/07/2017.
  */
 
 public class FontCache {
 
-    private static Hashtable<String, Typeface> fontCache = new Hashtable<String, Typeface>();
+    final private Hashtable<String, Typeface> fontCache;
 
-    public static Typeface get(String name, Context context) {
+    @Inject
+    public FontCache() {
+        fontCache = new Hashtable<String, Typeface>();
+    }
+
+    public Typeface get(String name, Context context) {
         Typeface tf = fontCache.get(name);
         if(tf == null) {
             try {
