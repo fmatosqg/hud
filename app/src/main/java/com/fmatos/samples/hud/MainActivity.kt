@@ -6,14 +6,14 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
-import android.util.Log
 import com.bumptech.glide.Glide
 import com.fmatos.samples.hud.service.WallpaperService
+import com.fmatos.samples.hud.utils.AndroidLogger
 import com.fmatos.samples.hud.utils.dagger.HudApplication
+import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Timed
@@ -38,6 +38,8 @@ class MainActivity : AppCompatActivity() {
 
     private val disposables = CompositeDisposable()
 
+    @Inject lateinit
+    var androidLogger: AndroidLogger
 
     @Inject lateinit
     var wallpaperService: WallpaperService
@@ -45,7 +47,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
         HudApplication.graph.inject(this)
 
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
             clock_time_text.typeface = face
         } catch (e: RuntimeException) {
-            Log.e(TAG, "Can't set custom font: ${e.localizedMessage}")
+            androidLogger.e(TAG, "Can't set custom font: %s", e.localizedMessage)
         }
 
         addWallpapers()
@@ -85,15 +86,15 @@ class MainActivity : AppCompatActivity() {
 
         disposables.add(wallpaperObserver.subscribeBy(
                 onNext = { url ->
-                    Log.i(TAG,"On glide url ${url}")
+                    androidLogger.i(TAG, "On glide url ${url}")
                     Glide.with(this)
                             .load(url)
                             .centerCrop()
                             .error(R.drawable.rocket_diamonds)
                             .into(background_img)
                 },
-                onComplete = { Log.i(TAG, "On glide Found complete") },
-                onError = { Log.i(TAG,"On glide error")}
+                onComplete = { androidLogger.i(TAG, "On glide Found complete") },
+                onError = { androidLogger.i(TAG, "On glide error") }
 
         ))
     }

@@ -1,15 +1,13 @@
 package com.fmatos.samples.hud.utils.dagger
 
 import android.app.Application
-import android.util.Log
+
 
 /**
  * Created by fmatos on 8/07/2017.
  */
 
 class HudApplication : Application() {
-
-    private val TAG: String = HudApplication::class.java.simpleName
 
     companion object {
         //  platformStatic allow access it from java code
@@ -25,6 +23,5 @@ class HudApplication : Application() {
                 .build()
 
         graph.inject(this)
-
     }
 }

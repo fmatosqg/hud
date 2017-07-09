@@ -1,14 +1,15 @@
 package com.fmatos.samples.hud.service
 
-import android.util.Log
 import com.fmatos.samples.hud.service.model.amazingwallpapers.Album
 import com.fmatos.samples.hud.service.model.amazingwallpapers.AmazingWallpapersService
 import com.fmatos.samples.hud.service.model.amazingwallpapers.Photo
+import com.fmatos.samples.hud.utils.AndroidLogger
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Timed
 import io.reactivex.subjects.BehaviorSubject
@@ -29,8 +30,12 @@ class WallpaperService {
 
     private val INTERVAL_1_SECOND_MS: Long = 1000
 
+    val androidLogger: AndroidLogger
+
     @Inject
-    constructor()
+    constructor(androidLogger: AndroidLogger) {
+        this.androidLogger = androidLogger
+    }
 
     /**
      * Returns an infinite stream of photo urls
@@ -42,19 +47,35 @@ class WallpaperService {
 
     private fun updateListObservable(): Observable<String> {
 
-        var clock1Min = Observable.interval(0, 60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
+        updateList()
+
+        var clockEmmitImageUrl = Observable.interval(0, 60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
                 .timeInterval()
 
 //        var zipper: BiFunction<in Timed<Long>, in String, out String>
         var zipper = BiFunction { time: Timed<Long>, url: String -> url }
 
         val urls = Observable
-                .zip(clock1Min, buildListObservable(), zipper)
+                .zip(clockEmmitImageUrl, buildListObservable(), zipper)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
 
         return urls
 
+    }
+
+    private fun updateList() {
+
+        var clockUpdateImageList = Observable.interval(0, 60*60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
+                .timeInterval()
+
+
+        clockUpdateImageList.subscribeBy(
+                onNext = {
+
+                    androidLogger.i(TAG, "On refresh from server")
+                }
+        )
     }
 
     private fun buildListObservable(): Observable<String> {
@@ -82,7 +103,7 @@ class WallpaperService {
 
     private fun fetchData(): Single<Album> {
 
-        Log.i(TAG,"On fetch list")
+        androidLogger.i(TAG, "On fetch list")
 
 
         val retrofit = Retrofit.Builder()
