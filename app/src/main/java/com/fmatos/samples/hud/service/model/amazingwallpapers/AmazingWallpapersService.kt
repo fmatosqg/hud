@@ -1,6 +1,6 @@
 package com.fmatos.samples.hud.service.model.amazingwallpapers
 
-import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,5 +12,5 @@ import retrofit2.http.Query
 interface AmazingWallpapersService {
 
     @GET("album/customrss?")
-    fun getAlbum(@Query("url") url: String): Observable<Album>
+    fun getAlbum(@Query("url") url: String): Single<Album>
 }

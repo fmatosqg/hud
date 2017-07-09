@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        Log.i(TAG,"Init activity")
         setContentView(R.layout.activity_main)
         HudApplication.graph.inject(this)
 
@@ -84,18 +83,7 @@ class MainActivity : AppCompatActivity() {
         var wallpaperObserver: Observable<String> = wallpaperService
                 .getObservable()
 
-        var clock1Min = Observable.interval(0, 60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
-                .timeInterval()
-
-//        var zipper: BiFunction<in Timed<Long>, in String, out String>
-        var zipper = BiFunction { time: Timed<Long>, url: String -> url }
-
-        val urls = Observable
-                .zip(clock1Min, wallpaperObserver, zipper)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-
-        disposables.add(urls.subscribeBy(
+        disposables.add(wallpaperObserver.subscribeBy(
                 onNext = { url ->
                     Log.i(TAG,"On glide url ${url}")
                     Glide.with(this)

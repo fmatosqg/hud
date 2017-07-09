@@ -16,12 +16,9 @@ class HudApplication : Application() {
         @JvmStatic lateinit var graph: ApplicationComponent
     }
 
-
-
     override fun onCreate() {
         super.onCreate()
 
-        Log.i(TAG,"Init graph")
         graph = DaggerApplicationComponent
                 .builder()
                 .activityModule(ActivityModule(this))
