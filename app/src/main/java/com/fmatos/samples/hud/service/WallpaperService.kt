@@ -11,6 +11,7 @@ import io.reactivex.subjects.Subject
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
 
 /**
@@ -23,7 +24,10 @@ class WallpaperService {
 
     val subject: Subject<String> = ReplaySubject.create()
 
-    fun buildObservable(): Observable<String> {
+    @Inject
+    constructor()
+
+    fun getObservable(): Observable<String> {
 
         return buildListObservable()
                 .repeatUntil({false})

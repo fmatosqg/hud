@@ -9,6 +9,7 @@ import android.text.format.Formatter
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.fmatos.samples.hud.service.WallpaperService
+import com.fmatos.samples.hud.utils.dagger.HudApplication
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -21,6 +22,7 @@ import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,10 +38,17 @@ class MainActivity : AppCompatActivity() {
 
     private val disposables = CompositeDisposable()
 
+
+    @Inject lateinit
+    var wallpaperService: WallpaperService
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
+        Log.i(TAG,"Init activity")
         setContentView(R.layout.activity_main)
+        HudApplication.graph.inject(this)
 
 
         var clock1Sec = Observable.interval(0, INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
@@ -72,8 +81,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun addWallpapers() {
 
-        var wallpaperObserver:Observable<String> = WallpaperService()
-                .buildObservable()
+        var wallpaperObserver: Observable<String> = wallpaperService
+                .getObservable()
 
         var clock1Min = Observable.interval(0, 60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
                 .timeInterval()
