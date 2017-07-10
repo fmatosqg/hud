@@ -9,13 +9,10 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.Timed
-import io.reactivex.subjects.BehaviorSubject
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -30,11 +27,20 @@ class WallpaperService {
 
     private val INTERVAL_1_SECOND_MS: Long = 1000
 
-    val androidLogger: AndroidLogger
+
+    private val ALBUM_INSTAGRAM_SCOTT_KELBY = "http://instatom.freelancis.net/scottkelby"
+    private val ALBUM_INSTAGRAM_INSTAGOOD = "http://instatom.freelancis.net/instagood"
+    private val ALBUM_500PX_FRESH = "https://500px.com/fresh.rss"
+
+    private val androidLogger: AndroidLogger
+    private val retrofit: Retrofit
+
+
 
     @Inject
-    constructor(androidLogger: AndroidLogger) {
+    constructor(androidLogger: AndroidLogger, retrofit: Retrofit) {
         this.androidLogger = androidLogger
+        this.retrofit = retrofit
     }
 
     /**
@@ -49,14 +55,14 @@ class WallpaperService {
 
         updateList()
 
-        var clockEmmitImageUrl = Observable.interval(0, 60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
+        var clockEmmitImageUrl = Observable.interval(0, 1 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
                 .timeInterval()
 
 //        var zipper: BiFunction<in Timed<Long>, in String, out String>
         var zipper = BiFunction { time: Timed<Long>, url: String -> url }
 
         val urls = Observable
-                .zip(clockEmmitImageUrl, buildListObservable(), zipper)
+                .zip(clockEmmitImageUrl, buildListObservable(ALBUM_INSTAGRAM_INSTAGOOD), zipper)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
 
@@ -66,31 +72,37 @@ class WallpaperService {
 
     private fun updateList() {
 
-        var clockUpdateImageList = Observable.interval(0, 60*60 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
+        var clockUpdateImageList = Observable.interval(5 * INTERVAL_1_SECOND_MS, 30 * INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
                 .timeInterval()
 
-
-        clockUpdateImageList.subscribeBy(
-                onNext = {
-
-                    androidLogger.i(TAG, "On refresh from server")
+        val oSubject: Observable<Observable<String>> = clockUpdateImageList
+                .map { it ->
+                    androidLogger.i(TAG, "On new observable")
+                    buildListObservable(ALBUM_INSTAGRAM_INSTAGOOD)
                 }
-        )
+
+        val o = Observable.switchOnNext(oSubject)
+
+
+//        o.subscribe(PublishSubject.create())
+
     }
 
-    private fun buildListObservable(): Observable<String> {
+    private fun buildListObservable(albumUrl: String): Observable<String> {
 
-        val photos = fetchData()
+        val photos = fetchData(albumUrl)
                 .observeOn(Schedulers.newThread())
                 .subscribeOn(Schedulers.newThread())
                 .toObservable()
-                .flatMap { album: Album -> BehaviorSubject.fromIterable(album.photos) }
+                .flatMap { album: Album ->
+                    androidLogger.i(TAG, "On flatmap")
+                    Observable.fromIterable(album.photos)
+                }
                 .filter { photo: Photo -> photo.url != null }
                 .map { photo: Photo ->
                     // it's guaranteed to not have nulls
                     // from filter, but we need the compiler sugar coating
                     val url: String = photo.url ?: ""
-
                     url
                 }
                 .repeat()
@@ -101,24 +113,15 @@ class WallpaperService {
 
     }
 
-    private fun fetchData(): Single<Album> {
+    private fun fetchData(albumUrl: String): Single<Album> {
 
-        androidLogger.i(TAG, "On fetch list")
+        androidLogger.i(TAG, "On fetch list %s", albumUrl)
 
+        val albumObservable = retrofit
+                .create(AmazingWallpapersService::class.java)
+                .getAlbum(albumUrl)
 
-        val retrofit = Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://amazingdomain.net/")
-                .build()
-
-        val ALBUM_INSTAGRAM_SCOTT_KELBY = "http://instatom.freelancis.net/scottkelby"
-        val ALBUM_INSTAGRAM_INSTAGOOD = "http://instatom.freelancis.net/instagood"
-
-        val amazingWallpaperService = retrofit.create(AmazingWallpapersService::class.java)
-        val scottKelbyAlbum = amazingWallpaperService.getAlbum(ALBUM_INSTAGRAM_INSTAGOOD)
-
-        return scottKelbyAlbum
+        return albumObservable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
     }

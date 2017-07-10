@@ -8,19 +8,19 @@ import android.util.Log
 
 class AndroidLogger {
 
-    fun i(tag: String, msg: String, vararg args: Any) {
+    fun i(tag: String, msg: String, vararg args: String?) {
         Log.i(tag, String.format(msg, *args))
     }
 
-    fun e(tag: String, msg: String, vararg args: Any) {
+    fun e(tag: String, msg: String, vararg args: String?) {
         Log.e(tag, String.format(msg, *args))
     }
 
-    fun v(tag: String, msg: String, vararg args: Any) {
+    fun v(tag: String, msg: String, vararg args: String?) {
         Log.v(tag, String.format(msg, *args))
     }
 
-    fun d(tag: String, msg: String, vararg args: Any) {
+    fun d(tag: String, msg: String, vararg args: String?) {
         Log.d(tag, String.format(msg, *args))
     }
 }
