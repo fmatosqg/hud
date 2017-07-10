@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+apply plugin: "kotlin-allopen"
+allOpen {
+    annotation("com.fmatos.samples.hud.testability.Mockable")
+}
+
+
 android {
     compileSdkVersion 'android-O'
     buildToolsVersion "26.0.0-rc2"
@@ -61,6 +67,8 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.8.47'
+    testCompile 'org.robolectric:robolectric:3.3.2'
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

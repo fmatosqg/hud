@@ -81,11 +81,6 @@ class WallpaperService {
                     buildListObservable(ALBUM_INSTAGRAM_INSTAGOOD)
                 }
 
-        val o = Observable.switchOnNext(oSubject)
-
-
-//        o.subscribe(PublishSubject.create())
-
     }
 
     private fun buildListObservable(albumUrl: String): Observable<String> {
