@@ -10,6 +10,7 @@ import com.fmatos.samples.hud.service.FontCache
 import com.fmatos.samples.hud.service.WallpaperService
 import com.fmatos.samples.hud.utils.AndroidLogger
 import com.fmatos.samples.hud.utils.dagger.HudApplication
+import com.fmatos.samples.hud.utils.dagger.SU_BINARY_PATH
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -22,12 +23,13 @@ import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 
 
 class MainActivity : AppCompatActivity() {
 
     private var TAG: String = MainActivity::class.java.simpleName
-    private val INTERVAL_1_SECOND_MS: Long = 1000
+
 
     private var time: String = ""
     private var date: String = ""
@@ -36,6 +38,10 @@ class MainActivity : AppCompatActivity() {
     private var test: String = ""
 
     private val disposables = CompositeDisposable()
+
+    @Inject
+    lateinit
+    var suBinaryPath: String
 
     @Inject lateinit
     var androidLogger: AndroidLogger
@@ -52,8 +58,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         HudApplication.graph.inject(this)
 
+        var rebootObservable = Observable.interval(600, 60, TimeUnit.SECONDS)
+                .timeInterval()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                        onNext = {
+                            androidLogger.i(TAG, "Reboot phone with binary %s",suBinaryPath)
+                            val proc = Runtime.getRuntime().exec(arrayOf(suBinaryPath, "-c", "reboot now"))
+                            proc.waitFor()
 
-        var clock1Sec = Observable.interval(0, INTERVAL_1_SECOND_MS, TimeUnit.MILLISECONDS)
+                            androidLogger.i(TAG, "stream %s / %s",
+                                    proc.outputStream.toString(),
+                                    proc.errorStream.toString())
+                        }
+                )
+
+        disposables.add(rebootObservable)
+
+
+        var clock1Sec = Observable.interval(0, 1, TimeUnit.SECONDS)
                 .timeInterval()
                 .subscribeOn(Schedulers.computation())
 
