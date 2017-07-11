@@ -36,6 +36,18 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE'
     }
+
+    flavorDimensions "platform"
+
+    productFlavors {
+        phone {
+            dimension "platform"
+        }
+
+        rpi3 {
+            dimension "platform"
+        }
+    }
 }
 
 dependencies {
@@ -76,15 +88,15 @@ dependencies {
 }
 
 task bundle(type: Zip, dependsOn: assemble) {
-   from 'build/outputs/apk/debug/'
-   include 'app-debug.apk'
+    from 'build/outputs/apk/rpi3/debug/'
+    include 'app-rpi3-debug.apk'
 
-   from '../bundle/animations'
-   include 'bootanimation.zip'
+    from '../bundle/animations'
+    include 'bootanimation.zip'
 
-   def folder='build/outputs/bundle'
-   archiveName 'bundle.zip'
-   destinationDir(file(folder))
+    def folder = 'build/outputs/bundle'
+    archiveName 'bundle.zip'
+    destinationDir(file(folder))
 
-   println "File generated on app/${folder}/${archiveName}"
+    println "File generated on app/${folder}/${archiveName}"
 }
