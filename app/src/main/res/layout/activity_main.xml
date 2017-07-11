@@ -73,9 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
-                android:fontFamily="@font/dseg7classic"
                 android:paddingTop="10dp"
-                android:textSize="220sp"
+                android:textSize="150sp"
                 tools:text="!7:46" />
 
 
