@@ -71,11 +71,11 @@ class WallpaperService {
 
 
 //        var zipper: BiFunction<in Timed<Long>, in String, out String>
-        var zipper = BiFunction { time: Timed<Long>, url: String -> url }
+        var zipper = BiFunction { _: Timed<Long>, url: String -> url }
 
 
         val fastUrls = buildListObservable(ALBUM_INSTAGRAM_INSTAGOOD)
-                .repeatWhen { t: Observable<Any> ->
+                .repeatWhen { _: Observable<Any> ->
                     androidLogger.i(TAG, "On stream is running empty")
                     throttle.debounce(DEBOUNCE_SECONDS, TimeUnit.SECONDS)
                 }

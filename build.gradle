@@ -28,11 +28,6 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-//project(":app") {
-   //task assembleRelease
-//}
-
-
 task bundle(type: Zip, dependsOn: [':app:assembleRpi3Debug'] ) {
     from 'app/build/outputs/apk/rpi3/debug/'
     include 'app-rpi3-debug.apk'
