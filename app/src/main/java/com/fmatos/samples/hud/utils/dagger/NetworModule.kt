@@ -7,10 +7,13 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import javax.inject.Singleton
 
 
@@ -45,6 +48,8 @@ class NetModule() {
     internal fun provideOkhttpClient(cache: Cache): OkHttpClient {
         val client = OkHttpClient.Builder()
         client.cache(cache)
+        client.addNetworkInterceptor(CustomInterceptor())
+
         return client.build()
     }
 
@@ -57,5 +62,23 @@ class NetModule() {
                 .baseUrl(SERVER_HOSTNAME)
                 .build()
     }
+
+
+    inner class CustomInterceptor : Interceptor {
+
+        @Throws(IOException::class)
+        override
+        fun intercept(chain: Interceptor.Chain): Response {
+            val originalRequest = chain.request()
+            val requestWithUserAgent = originalRequest.newBuilder()
+                    .removeHeader("User-Agent")
+                    .addHeader("User-Agent", "AndroidThings-Rpi3-HUD")
+                    .build()
+
+            return chain.proceed(requestWithUserAgent)
+        }
+
+    }
+
 
 }

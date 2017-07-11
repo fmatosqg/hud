@@ -23,7 +23,11 @@ import javax.inject.Inject
  */
 class WallpaperService {
 
-    private var TAG: String = WallpaperService::class.java.simpleName
+    private val TAG: String = WallpaperService::class.java.simpleName
+
+    private val RETRY_INTERVAL_SECONDS: Long = 60
+    private val PHOTO_PRINT_TIME_SECONDS: Long = 60
+    private val DEBOUNCE_SECONDS: Long = 5
 
     private val ALBUM_INSTAGRAM_SCOTT_KELBY = "http://instatom.freelancis.net/scottkelby"
     private val ALBUM_INSTAGRAM_INSTAGOOD = "http://instatom.freelancis.net/instagood"
@@ -43,7 +47,7 @@ class WallpaperService {
     }
 
     /**
-     * Returns an infinite stream of photo urls
+     * Returns an infinite stream of photo urls, one every PHOTO_PRINT_TIME_SECONDS seconds
      */
     fun getObservable(): Observable<String> {
 
@@ -55,9 +59,14 @@ class WallpaperService {
     private val bufferSize = 5
 
 
+    /**
+     * provides coroutine to watch available amount of items inside the stream
+     * and trigger server fetch when count is too low
+     */
     private fun updateListObservable(): Observable<String> {
 
-        var clockEmmitImageUrl = Observable.interval(0, 60, TimeUnit.SECONDS)
+        var clockEmmitImageUrl = Observable.interval(0, PHOTO_PRINT_TIME_SECONDS,
+                TimeUnit.SECONDS)
                 .timeInterval()
 
 
@@ -67,8 +76,8 @@ class WallpaperService {
 
         val fastUrls = buildListObservable(ALBUM_INSTAGRAM_INSTAGOOD)
                 .repeatWhen { t: Observable<Any> ->
-                    androidLogger.i(TAG, "On repeat when")
-                    throttle
+                    androidLogger.i(TAG, "On stream is running empty")
+                    throttle.debounce(DEBOUNCE_SECONDS, TimeUnit.SECONDS)
                 }
                 .map {
                     it ->
@@ -81,11 +90,13 @@ class WallpaperService {
                 .map { it ->
                     printCount++
                     androidLogger.i(TAG, "On prints %s > %s ", itemsCount.toString(), printCount.toString())
-                    if (itemsCount == (printCount + bufferSize)) {
+                    if (itemsCount < (printCount + bufferSize)) {
+                        androidLogger.i(TAG, "On refill stream from server")
                         throttle.onNext(printCount)
                     }
                     it
                 }
+                .debounce(DEBOUNCE_SECONDS, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
 
@@ -97,25 +108,30 @@ class WallpaperService {
 
         val urls = fetchData(albumUrl)
                 .toObservable()
-                .observeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.newThread())
                 .flatMap { album: Album ->
-                    androidLogger.i(TAG, "On flatmap")
+                    androidLogger.i(TAG, "On fetched album: %s (%s)", album.niceName, album.photos.size.toString())
+                    if (!isAlbumInvalid(album)) {
+                        throw RuntimeException("On album is invalid (RuntimeException)")
+                    }
                     Observable.fromIterable(album.photos)
                 }
-                .filter { photo: Photo -> photo.url != null }
-                .map { photo: Photo ->
-                    // it's guaranteed to not have nulls
-                    // from filter, but we need the compiler sugar coating
-                    val url: String = photo.url ?: ""
-                    url
+                .retryWhen { errs ->
+                    errs.flatMap { err ->
+                        androidLogger.i(TAG, "On retry flatmap in %s seconds %s"
+                                , RETRY_INTERVAL_SECONDS.toString(), err.localizedMessage)
+                        Observable.timer(RETRY_INTERVAL_SECONDS, TimeUnit.SECONDS)
+                    }
                 }
-
+                .filter { photo: Photo -> photo.url != null }
+                .map { photo: Photo -> photo.url ?: "" }
 
 
         return urls
     }
 
+    /**
+     * Returns a single that brings an album and its photo urls from the server
+     */
     private fun fetchData(albumUrl: String): Single<Album> {
 
         androidLogger.i(TAG, "On fetch list %s", albumUrl)
@@ -128,5 +144,11 @@ class WallpaperService {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.newThread())
     }
+
+
+    private fun isAlbumInvalid(album: Album): Boolean {
+        return album.photos.size > 0
+    }
+
 
 }
