@@ -74,3 +74,17 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
+
+task bundle(type: Zip, dependsOn: assemble) {
+   from 'build/outputs/apk/debug/'
+   include 'app-debug.apk'
+
+   from '../bundle/animations'
+   include 'bootanimation.zip'
+
+   def folder='build/outputs/bundle'
+   archiveName 'bundle.zip'
+   destinationDir(file(folder))
+
+   println "File generated on app/${folder}/${archiveName}"
+}
