@@ -72,6 +72,8 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
 
+    rpi3Provided 'com.google.android.things:androidthings:0.4-devpreview'
+
     def daggerVersion = '2.11'
     compile "com.google.dagger:dagger-android:$daggerVersion"
     compile "com.google.dagger:dagger-android-support:$daggerVersion"

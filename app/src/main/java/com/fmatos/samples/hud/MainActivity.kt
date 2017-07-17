@@ -5,9 +5,12 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
+import android.view.View
 import com.bumptech.glide.Glide
 import com.fmatos.samples.hud.service.FontCache
+
 import com.fmatos.samples.hud.service.WallpaperService
+import com.fmatos.samples.hud.service.iot.TiltService
 import com.fmatos.samples.hud.utils.AndroidLogger
 import com.fmatos.samples.hud.utils.dagger.HudApplication
 import io.reactivex.Observable
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit
     var fontCache: FontCache
 
+    @Inject lateinit
+    var tiltService: TiltService
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -69,8 +75,16 @@ class MainActivity : AppCompatActivity() {
                         .subscribe({ updateScreen() })
         )
 
+        test_text.visibility = View.VISIBLE
+
+        disposables.add(
+                tiltService.getTiltObservable()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe( { test_text.text = "$it ttt"})
+        )
+
         try {
-            val typeface = fontCache.get("fonts/dseg7classic_light.ttf",this)
+            val typeface = fontCache.get("fonts/dseg7classic_light.ttf", this)
 
             clock_time_text.typeface = typeface
         } catch (e: RuntimeException) {
@@ -123,8 +137,6 @@ class MainActivity : AppCompatActivity() {
         clock_time_text.text = timeView
 
         ip_text.text = ip
-
-        test_text.text = test
 
     }
 

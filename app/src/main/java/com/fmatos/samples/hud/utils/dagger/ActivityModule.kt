@@ -2,6 +2,7 @@ package com.fmatos.samples.hud.utils.dagger
 
 import android.app.Application
 import com.fmatos.samples.hud.service.WallpaperService
+import com.fmatos.samples.hud.service.iot.TiltService
 import com.fmatos.samples.hud.utils.AndroidLogger
 import dagger.Module
 import dagger.Provides
@@ -29,6 +30,12 @@ class ActivityModule(private val application: Application) {
     @Singleton
     fun providesAndroidLogger(): AndroidLogger {
         return AndroidLogger()
+    }
+
+    @Provides
+    @Singleton
+    fun providesTiltService(): TiltService {
+        return TiltService()
     }
 
 }
