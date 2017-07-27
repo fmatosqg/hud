@@ -38,3 +38,8 @@ local.properties
 *.idea
 
 README.html
+
+
+# Signing keys
+*.keystore
+secrets.gradle

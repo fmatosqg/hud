@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha6'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha7'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
 
@@ -39,5 +39,7 @@ task bundle(type: Zip, dependsOn: [':app:assembleRpi3Debug'] ) {
     archiveName 'bundle-rpi3.zip'
     destinationDir(file(folder))
 
-    println "File generated on ${folder}/${archiveName}"
+    doLast {
+        println "File generated on ${folder}/${archiveName}"
+    }
 }
