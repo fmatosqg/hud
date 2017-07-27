@@ -23,3 +23,27 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn org.joda.convert.**
+-dontwarn org.joda.time.**
+-keep class org.joda.time.** { *; }
+-keep interface org.joda.time.** { *; }
+
+-dontwarn com.squareup.okhttp3.**
+-keep class com.squareup.okhttp3.* { *;}
+
+# okio
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+# retrofit
+-keep class java.lang.invoke.** {*;}
+
+
+# dagger
+-dontwarn com.google.errorprone.annotations.*
+
+# lambas for java 8
+-dontwarn java.lang.invoke**
