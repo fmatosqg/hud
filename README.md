@@ -19,3 +19,16 @@ ext {
 }
 
 </code>
+
+# Set up your device
+
+This version looks good on devices with low resolution. Add this to the end of your config.txt  on the first partition (type msdos). 
+Tested on preview 0.4.0
+
+
+```
+max_usb_current=1
+hdmi_group=2
+hdmi_mode=87
+hdmi_cvt 800 480 60 6 0 0 0
+```
