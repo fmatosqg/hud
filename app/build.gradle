@@ -12,12 +12,12 @@ allOpen {
 apply from: 'secrets.gradle' // see README for instructions
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.0"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "com.fmatos.samples.hud"
         minSdkVersion 24
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -63,7 +63,7 @@ android {
 
 dependencies {
 
-    def supportLibraryVersion = '25.3.1'
+    def supportLibraryVersion = '26.0.2'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"

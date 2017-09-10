@@ -4,9 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fmatos.samples.hud.MainActivity"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="25dp">
+    tools:context="com.fmatos.samples.hud.MainActivity">
 
 
     <ImageView
@@ -15,70 +13,95 @@
         android:layout_height="match_parent"
         tools:src="@drawable/rocket_diamonds" />
 
-    <android.support.v7.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:cardBackgroundColor="@color/transparentGray"
-        app:cardElevation="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:cardCornerRadius="40dp"
-        >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <android.support.v4.widget.Space
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:padding="20dp"
-            android:gravity="center"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/test_text"
+            android:layout_weight="0.15" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:layout_weight="0.7"
+            app:cardBackgroundColor="@color/transparentGray"
+            app:cardCornerRadius="40dp"
+            app:cardElevation="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:background="@color/transparent"
-                android:padding="10dp"
-                android:textSize="40sp"
-                android:text="asdas"
-                android:visibility="gone"
-                tools:text="Test"
-                tools:visibility="gone" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <TextView
-                android:id="@+id/ip_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:textColor="?android:textColorSecondary"
-                android:textSize="20sp"
-                tools:text="1.1.1.1" />
+                <TextView
+                    android:id="@+id/test_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:padding="10dp"
+                    android:text="asdas"
+                    android:textSize="40sp"
+                    android:visibility="gone"
+                    tools:text="Test"
+                    tools:visibility="gone" />
 
-            <TextView
-                android:id="@+id/clock_date_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:padding="10dp"
-                android:textSize="40sp"
-                tools:text="24/5" />
+                <TextView
+                    android:id="@+id/ip_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="20sp"
+                    tools:text="1.1.1.1" />
 
-            <TextView
-                android:id="@+id/clock_time_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:paddingTop="10dp"
-                android:textSize="110sp"
-                tools:text="!7:46" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/clock_date_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@color/transparent"
+                    android:lines="1"
+                    android:padding="10dp"
+                    android:textAlignment="center"
+                    android:textSize="40sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeStepGranularity="1sp"
+                    tools:text="24/5 friday august 2017" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/clock_time_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="120sp"
+                    android:background="@color/transparent"
+                    android:lines="1"
+                    android:paddingTop="10dp"
+                    android:textAlignment="center"
+                    android:textSize="410sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform"
+                    tools:text="!7:46" />
 
 
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        <android.support.v4.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
