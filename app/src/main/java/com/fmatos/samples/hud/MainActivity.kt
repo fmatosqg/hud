@@ -19,6 +19,7 @@ import io.reactivex.schedulers.Timed
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
+import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private var ip: String = ""
     private var textBlink: Boolean = true
     private var test: String = ""
+    private var alertText: String = ""
 
     private val disposables = CompositeDisposable()
 
@@ -126,6 +128,7 @@ class MainActivity : AppCompatActivity() {
 
         test_text.text = test
 
+        alert_text.text = alertText
     }
 
     private fun updateModel(longTimed: Timed<Long>) {
@@ -141,6 +144,31 @@ class MainActivity : AppCompatActivity() {
 
         test = "${longTimed.value()}"
         getWifiIp()
+
+        alertText = scanAlarms()
+
+    }
+
+    private fun scanAlarms(): String {
+
+//        val time = LocalTime(10, 0)
+        val time = LocalTime(21, 30)
+
+        if (isAlarmTime(time, 10)) {
+            return "Alarm"
+        } else {
+            return "No Alarm"
+        }
+    }
+
+    private fun isAlarmTime(time: LocalTime, marginMinutes: Int): Boolean {
+
+        val now = LocalTime()
+
+        val marginTime = time.minusMinutes(marginMinutes)
+
+        return now.isAfter(marginTime) && now.isBefore(time)
+
     }
 
     private fun getWifiIp() {

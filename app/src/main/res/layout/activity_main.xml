@@ -29,7 +29,7 @@
         <android.support.v7.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="40dp"
+            android:layout_margin="0dp"
             android:layout_weight="0.7"
             app:cardBackgroundColor="@color/transparentGray"
             app:cardCornerRadius="40dp"
@@ -72,7 +72,7 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/clock_date_text"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="40dp"
                     android:background="@color/transparent"
                     android:lines="1"
                     android:padding="10dp"
@@ -95,6 +95,19 @@
                     app:autoSizeTextType="uniform"
                     tools:text="!7:46" />
 
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/alert_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/transparent"
+                    android:lines="1"
+                    android:paddingTop="10dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/darkGreen"
+                    android:textSize="110sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform"
+                    tools:text="Some Alert" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
