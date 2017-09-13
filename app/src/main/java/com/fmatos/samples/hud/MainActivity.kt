@@ -5,7 +5,9 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
+import android.view.View
 import com.bumptech.glide.Glide
+import com.fmatos.samples.hud.service.AlertService
 import com.fmatos.samples.hud.service.FontCache
 import com.fmatos.samples.hud.service.WallpaperService
 import com.fmatos.samples.hud.utils.AndroidLogger
@@ -19,7 +21,6 @@ import io.reactivex.schedulers.Timed
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
-import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private var ip: String = ""
     private var textBlink: Boolean = true
     private var test: String = ""
-    private var alertText: String = ""
+    private var alertText: String? = ""
 
     private val disposables = CompositeDisposable()
 
@@ -47,6 +48,12 @@ class MainActivity : AppCompatActivity() {
 
     @Inject lateinit
     var fontCache: FontCache
+
+    @Inject lateinit var
+            timezone: DateTimeZone
+
+    @Inject lateinit var
+            alertService: AlertService
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -114,8 +121,6 @@ class MainActivity : AppCompatActivity() {
 
         var timeView: String = time
 
-//        timeView = time.replace(' ', '!')
-
         if (textBlink) {
             timeView = timeView.replace(':', ' ')
         }
@@ -128,46 +133,31 @@ class MainActivity : AppCompatActivity() {
 
         test_text.text = test
 
-        alert_text.text = alertText
+        if (alertText != null) {
+            alert_text.text = alertText
+            alert_text.visibility =
+                    if (textBlink) View.INVISIBLE
+                    else View.VISIBLE
+        } else {
+            alert_text.visibility = View.GONE
+        }
     }
 
     private fun updateModel(longTimed: Timed<Long>) {
 
 //        val dateTime = DateTime.now().toDateTime(DateTimeZone.forOffsetHours(-3))
 //        val locale = java.util.Locale("es", "AR")
-        val dateTime = DateTime.now().toDateTime(DateTimeZone.forOffsetHours(+10))
+        val dateTime = DateTime.now().toDateTime(timezone)
         val locale = java.util.Locale("en", "AU")
 
 //        time = DateTimeFormat.forPattern("h:mm a").withLocale(locale).print(dateTime)
-        time = DateTimeFormat.forPattern("h:mm").withLocale(locale).print(dateTime)
+        time = DateTimeFormat.forPattern("h:mm a").withLocale(locale).print(dateTime)
         date = DateTimeFormat.forPattern("EEEEE, dd MMMM yyyy").withLocale(locale).print(dateTime)
 
         test = "${longTimed.value()}"
         getWifiIp()
 
-        alertText = scanAlarms()
-
-    }
-
-    private fun scanAlarms(): String {
-
-//        val time = LocalTime(10, 0)
-        val time = LocalTime(21, 30)
-
-        if (isAlarmTime(time, 10)) {
-            return "Alarm"
-        } else {
-            return "No Alarm"
-        }
-    }
-
-    private fun isAlarmTime(time: LocalTime, marginMinutes: Int): Boolean {
-
-        val now = LocalTime()
-
-        val marginTime = time.minusMinutes(marginMinutes)
-
-        return now.isAfter(marginTime) && now.isBefore(time)
+        alertText = alertService.getAlert()
 
     }
 
