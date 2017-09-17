@@ -82,32 +82,86 @@
                     app:autoSizeStepGranularity="1sp"
                     tools:text="24/5 friday august 2017" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/clock_time_text"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="120sp"
+                    android:layout_height="wrap_content"
                     android:background="@color/transparent"
-                    android:lines="1"
-                    android:paddingTop="10dp"
-                    android:textAlignment="center"
-                    android:textSize="410sp"
-                    app:autoSizeStepGranularity="1sp"
-                    app:autoSizeTextType="uniform"
-                    tools:text="!7:46" />
+                    android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/alert_text"
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/clock_time_text"
+                        android:layout_width="0dp"
+                        android:layout_height="120sp"
+                        android:layout_weight="1"
+                        android:background="@color/transparent"
+                        android:lines="1"
+                        android:paddingTop="10dp"
+                        android:textAlignment="center"
+                        android:textSize="410sp"
+                        app:autoSizeStepGranularity="1sp"
+                        app:autoSizeTextType="uniform"
+                        tools:text="!7:46" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@color/transparent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/label_am"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/transparent"
+                            android:text="AM"
+                            android:textSize="30dp" />
+
+                        <TextView
+                            android:id="@+id/label_pm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/transparent"
+                            android:text="PM"
+                            android:textSize="30dp"
+                            tools:visibility="invisible" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@color/transparent"
-                    android:lines="1"
-                    android:paddingTop="10dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/darkGreen"
-                    android:textSize="110sp"
-                    app:autoSizeStepGranularity="1sp"
-                    app:autoSizeTextType="uniform"
-                    tools:text="Some Alert" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/alert_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@color/transparent"
+                        android:lines="1"
+                        android:paddingTop="10dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/darkGreen"
+                        android:textSize="110sp"
+                        app:autoSizeStepGranularity="1sp"
+                        app:autoSizeTextType="uniform"
+                        tools:text="Some Alert"
+                        tools:visibility="gone" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/countdown_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@color/transparent"
+                        android:lines="1"
+                        android:paddingTop="10dp"
+                        android:textAlignment="center"
+
+                        android:textSize="80sp"
+                        app:autoSizeStepGranularity="1sp"
+                        app:autoSizeTextType="uniform"
+                        tools:text="1 day to whatever" />
+                </FrameLayout>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

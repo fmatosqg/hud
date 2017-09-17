@@ -8,6 +8,7 @@ import android.text.format.Formatter
 import android.view.View
 import com.bumptech.glide.Glide
 import com.fmatos.samples.hud.service.AlertService
+import com.fmatos.samples.hud.service.CountdownService
 import com.fmatos.samples.hud.service.FontCache
 import com.fmatos.samples.hud.service.WallpaperService
 import com.fmatos.samples.hud.utils.AndroidLogger
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity() {
     private var textBlink: Boolean = true
     private var test: String = ""
     private var alertText: String? = ""
+    private var countdownText: String? = ""
+    private var isAm: Boolean? = null // true means AM, false means PM, null means don't show
 
     private val disposables = CompositeDisposable()
 
@@ -54,6 +57,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var
             alertService: AlertService
+
+    @Inject lateinit var
+            countdownService: CountdownService
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -133,15 +139,39 @@ class MainActivity : AppCompatActivity() {
 
         test_text.text = test
 
+        if (isAm == null) {
+            label_am.visibility = View.GONE
+            label_pm.visibility = View.GONE
+
+        } else if (isAm ?: true) {
+            label_am.visibility = View.VISIBLE
+            label_pm.visibility = View.INVISIBLE
+
+        } else {
+            label_am.visibility = View.INVISIBLE
+            label_pm.visibility = View.VISIBLE
+
+        }
+
         if (alertText != null) {
             alert_text.text = alertText
             alert_text.visibility =
                     if (textBlink) View.INVISIBLE
                     else View.VISIBLE
+
+            countdown_text.visibility = View.GONE
         } else {
             alert_text.visibility = View.GONE
+
+            if (countdownText?.isNotEmpty() ?: false) {
+                countdown_text.text = countdownText
+                countdown_text.visibility = View.VISIBLE
+            } else {
+                countdown_text.visibility = View.GONE
+            }
         }
     }
+
 
     private fun updateModel(longTimed: Timed<Long>) {
 
@@ -151,13 +181,19 @@ class MainActivity : AppCompatActivity() {
         val locale = java.util.Locale("en", "AU")
 
 //        time = DateTimeFormat.forPattern("h:mm a").withLocale(locale).print(dateTime)
-        time = DateTimeFormat.forPattern("h:mm a").withLocale(locale).print(dateTime)
+        time = DateTimeFormat.forPattern("h:mm").withLocale(locale).print(dateTime)
         date = DateTimeFormat.forPattern("EEEEE, dd MMMM yyyy").withLocale(locale).print(dateTime)
+
+        val ampm = DateTimeFormat.forPattern("a").withLocale(locale).print(dateTime)
+
+        isAm = ampm?.equals("AM")
 
         test = "${longTimed.value()}"
         getWifiIp()
 
         alertText = alertService.getAlert()
+
+        countdownText = countdownService.getText()
 
     }
 
