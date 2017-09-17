@@ -43,3 +43,9 @@ task bundle(type: Zip, dependsOn: [':app:assembleRpi3Debug']) {
         println "File generated on ${folder}/${archiveName}"
     }
 }
+
+task printHome () {
+    // helps check if android studio picked up the right folders
+    println gradle.gradleHomeDir
+    println gradle.gradleUserHomeDir
+}
