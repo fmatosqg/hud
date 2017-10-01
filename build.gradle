@@ -30,7 +30,7 @@ task clean(type: Delete) {
 
 task bundle(type: Zip, dependsOn: [':app:assembleRpi3Debug']) {
     from 'app/build/outputs/apk/rpi3/debug/'
-    include 'app-rpi3-debug.apk'
+    include 'app-rpi3-release.apk'
 
     from 'bundle/animations'
     include 'bootanimation.zip'

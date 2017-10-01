@@ -33,9 +33,13 @@ class ActivityModule(private val application: Application) {
         return AndroidLogger()
     }
 
+    /**
+     * https://garygregory.wordpress.com/2013/06/18/what-are-the-java-timezone-ids/
+     */
     @Provides
     @Singleton
     fun providesTimezone(): DateTimeZone {
-        return DateTimeZone.forOffsetHours(+10)
+
+        return  DateTimeZone.forID("Australia/Melbourne")
     }
 }
