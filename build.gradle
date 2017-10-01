@@ -30,12 +30,34 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task bundle(type: Zip, dependsOn: [':app:assembleRpi3Debug']) {
-    from 'app/build/outputs/apk/rpi3/debug/'
-    include 'app-rpi3-release.apk'
+def apkFolder = 'app/build/outputs/apk/rpi3/release'
+def apkFilename = 'app-rpi3-release.apk'
 
-    from 'bundle/animations'
-    include 'bootanimation.zip'
+def animationFolder = 'bundle/animations'
+def animationFilename = 'bootanimation.zip'
+
+task checkArtifacts(dependsOn: ':app:assembleRpi3Release') {
+
+    def apkPath = "$apkFolder/$apkFilename"
+    if (!file(apkPath).exists()) {
+        throw new GradleException("App artifact missing, build must have failed ($apkPath)")
+    }
+
+
+    def animationPath = "$animationFolder/$animationFilename"
+    if (!file(animationPath).exists()) {
+        throw new GradleException("Animation asset missing, expected on $animationPath")
+    }
+
+}
+
+task bundle(type: Zip, dependsOn: ['checkArtifacts']) {
+
+    from apkFolder
+    include apkFilename
+
+    from animationFolder
+    include animationFilename
 
     def time = buildTime()
     def folder = 'build/outputs/bundle'
@@ -48,7 +70,7 @@ task bundle(type: Zip, dependsOn: [':app:assembleRpi3Debug']) {
 }
 
 def buildTime() {
-    def df = new SimpleDateFormat("yyyy-MM-dd")
+    def df = new SimpleDateFormat("yyyy-MM-dd-HHmm")
     return df.format(new Date())
 }
 

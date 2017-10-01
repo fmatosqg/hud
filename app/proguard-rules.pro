@@ -47,3 +47,6 @@
 
 # lambas for java 8
 -dontwarn java.lang.invoke**
+
+# project's network models
+-keep class com.fmatos.samples.hud.service.model.amazingwallpapers.** {*; }
