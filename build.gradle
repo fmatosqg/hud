@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -35,13 +37,19 @@ task bundle(type: Zip, dependsOn: [':app:assembleRpi3Debug']) {
     from 'bundle/animations'
     include 'bootanimation.zip'
 
+    def time = buildTime()
     def folder = 'build/outputs/bundle'
-    archiveName 'bundle-rpi3.zip'
+    archiveName "bundle-rpi3-${time}.zip"
     destinationDir(file(folder))
 
     doLast {
         println "File generated on ${folder}/${archiveName}"
     }
+}
+
+def buildTime() {
+    def df = new SimpleDateFormat("yyyy-MM-dd")
+    return df.format(new Date())
 }
 
 task printHome () {
