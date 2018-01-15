@@ -34,6 +34,7 @@ class WallpaperService {
     private val ALBUM_500PX_FRESH = "https://500px.com/fresh.rss?period=today"
     //    private val ALBUM_SPACEX_TWITTER = "https://www.flickr.com/photos/spacex/"
     private val ALBUM_SPACEX_FLICKR = "https://www.flickr.com/services/feeds/photos_public.gne?id=130608600@N05"
+    private val ALBUM_REDDIT_EARTH_P = "https://www.reddit.com/r/EarthPorn/.rss"
 
     private val androidLogger: AndroidLogger
     private val retrofit: Retrofit
@@ -74,7 +75,7 @@ class WallpaperService {
         var zipper = BiFunction { _: Timed<Long>, url: String -> url }
 
 
-        val fastUrls = buildListObservable(ALBUM_INSTAGRAM_INSTAGOOD)
+        val fastUrls = buildListObservable(ALBUM_REDDIT_EARTH_P)
                 .repeatWhen { _: Observable<Any> ->
                     androidLogger.i(TAG, "On stream is running empty")
                     throttle.debounce(DEBOUNCE_SECONDS, TimeUnit.SECONDS)
