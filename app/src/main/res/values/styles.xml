@@ -11,4 +11,11 @@
         <item name="android:textColorSecondary">@color/lightRed</item>
     </style>
 
+    <style name="PlayerTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/black</item>
+    </style>
+
+    <style name="ExoMediaButton.Pause">
+        <item name="android:contentDescription">@string/exo_controls_pause_description</item>
+    </style>
 </resources>

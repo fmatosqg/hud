@@ -94,6 +94,8 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
+    implementation 'com.google.android.exoplayer:exoplayer:2.6.1'
+
     rpi3CompileOnly 'com.google.android.things:androidthings:0.5-devpreview'
 
     testImplementation 'junit:junit:4.12'

@@ -69,6 +69,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        VideoActivity.startActivity(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         HudApplication.graph.inject(this)

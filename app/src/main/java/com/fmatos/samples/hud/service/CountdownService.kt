@@ -20,7 +20,7 @@ class CountdownService {
         this.timezone = timezone
 
         safeAddCountdown("12/10/2017", "Birthday 1")
-        safeAddCountdown("31/11/2017", "Birthday 2")
+        safeAddCountdown("30/11/2017", "Birthday 2")
 
 
     }
