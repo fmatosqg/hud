@@ -38,15 +38,17 @@ def animationFilename = 'bootanimation.zip'
 
 task checkArtifacts(dependsOn: ':app:assembleRpi3Release') {
 
-    def apkPath = "$apkFolder/$apkFilename"
-    if (!file(apkPath).exists()) {
-        throw new GradleException("App artifact missing, build must have failed ($apkPath)")
-    }
+    doLast {
+        def apkPath = "$apkFolder/$apkFilename"
+        if (!file(apkPath).exists()) {
+            throw new GradleException("App artifact missing, build must have failed ($apkPath)")
+        }
 
 
-    def animationPath = "$animationFolder/$animationFilename"
-    if (!file(animationPath).exists()) {
-        throw new GradleException("Animation asset missing, expected on $animationPath")
+        def animationPath = "$animationFolder/$animationFilename"
+        if (!file(animationPath).exists()) {
+            throw new GradleException("Animation asset missing, expected on $animationPath")
+        }
     }
 
 }
