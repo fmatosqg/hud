@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
 import android.view.View
 import com.bumptech.glide.Glide
+import com.fmatos.samples.hud.io.controller.ServoController
 import com.fmatos.samples.hud.service.AlertService
 import com.fmatos.samples.hud.service.CountdownService
 import com.fmatos.samples.hud.service.FontCache
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
     private var countdownText: String? = ""
     private var isAm: Boolean? = null // true means AM, false means PM, null means don't show
 
+    private var servoAngle = 90
+
     private val disposables = CompositeDisposable()
 
     @Inject lateinit
@@ -60,6 +63,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var
             countdownService: CountdownService
+
+    @Inject lateinit var
+            servoController: ServoController
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -85,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         try {
-            val typeface = fontCache.get("fonts/dseg7classic_light.ttf",this)
+            val typeface = fontCache.get("fonts/dseg7classic_light.ttf", this)
 
             clock_time_text.typeface = typeface
         } catch (e: RuntimeException) {
@@ -130,6 +136,10 @@ class MainActivity : AppCompatActivity() {
         if (textBlink) {
             timeView = timeView.replace(':', ' ')
         }
+
+        servoAngle = if (textBlink) 90 else 80
+
+        servoController.setPosition(servoAngle.toDouble())
 
         clock_date_text.text = date
 

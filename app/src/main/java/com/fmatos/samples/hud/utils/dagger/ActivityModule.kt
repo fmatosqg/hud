@@ -1,6 +1,7 @@
 package com.fmatos.samples.hud.utils.dagger
 
 import android.app.Application
+import com.fmatos.samples.hud.io.controller.ServoController
 import com.fmatos.samples.hud.service.WallpaperService
 import com.fmatos.samples.hud.utils.AndroidLogger
 import dagger.Module
@@ -40,6 +41,12 @@ class ActivityModule(private val application: Application) {
     @Singleton
     fun providesTimezone(): DateTimeZone {
 
-        return  DateTimeZone.forID("Australia/Melbourne")
+        return DateTimeZone.forID("Australia/Melbourne")
+    }
+
+    @Provides
+    @Singleton
+    fun providesServoController(): ServoController {
+        return ServoController(ServoController.pwm0Pin)
     }
 }
