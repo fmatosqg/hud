@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -40,12 +42,23 @@ class VideoActivity : AppCompatActivity() {
     private var currentWindow: Int = 0
     private var playWhenReady = true
 
+    private val timeoutMs = 25000L
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
 
         componentListener = ComponentListener()
         playerView = findViewById(R.id.video_view)
+
+        Handler()
+                .postDelayed(Runnable() {
+                    Log.i(TAG, "Finish Activity")
+                    if (BuildConfig.DEBUG) {
+                        Toast.makeText(this@VideoActivity, "Finish activity", Toast.LENGTH_LONG).show()
+                    }
+                    finish()
+                }, timeoutMs)
     }
 
     public override fun onStart() {
@@ -90,7 +103,15 @@ class VideoActivity : AppCompatActivity() {
             player!!.seekTo(currentWindow, playbackPosition)
         }
 
-        val url = "https://v.cdn.vine.co/r/videos/C40B136F021365174982178762752_53f4484ad8e.25.1.ADDA1E67-CF16-4C3B-901A-DE068DE26134.mp4"
+        var url = "https://v.cdn.vine.co/r/videos/C40B136F021365174982178762752_53f4484ad8e.25.1.ADDA1E67-CF16-4C3B-901A-DE068DE26134.mp4"
+//        url = "http://techslides.com/demos/sample-videos/small.mp4"
+//        url = "http://techslides.com/demos/sample-videos/small.webm"
+//        url = "http://techslides.com/demos/sample-videos/small.3gp"
+//        url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+//        url = "http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"
+
+        url = getString(R.string.media_url_mp4)
+
         val mediaSource = buildMediaSource1(Uri.parse(url))
         player!!.repeatMode = Player.REPEAT_MODE_ONE
         player!!.prepare(mediaSource, true, true)
@@ -136,17 +157,23 @@ class VideoActivity : AppCompatActivity() {
     private inner class ComponentListener : Player.DefaultEventListener() {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            val stateString: String
-            when (playbackState) {
-                Player.STATE_IDLE -> stateString = "ExoPlayer.STATE_IDLE      -"
-                Player.STATE_BUFFERING -> stateString = "ExoPlayer.STATE_BUFFERING -"
-                Player.STATE_READY -> stateString = "ExoPlayer.STATE_READY     -"
-                Player.STATE_ENDED -> {
-                    stateString = "ExoPlayer.STATE_ENDED     -"
-                    loopVideo()
-                }
-                else -> stateString = "UNKNOWN_STATE             -"
-            }
+            val stateString: String =
+                    when (playbackState) {
+                        Player.STATE_IDLE -> "ExoPlayer.STATE_IDLE      -"
+                        Player.STATE_BUFFERING -> "ExoPlayer.STATE_BUFFERING -"
+                        Player.STATE_READY -> {
+                            if (BuildConfig.DEBUG) {
+                                Toast.makeText(this@VideoActivity, "Video is ready", Toast.LENGTH_SHORT).show()
+                            }
+                            "ExoPlayer.STATE_READY     -"
+                        }
+                        Player.STATE_ENDED -> {
+
+                            loopVideo()
+                            "ExoPlayer.STATE_ENDED     -"
+                        }
+                        else -> "UNKNOWN_STATE             -"
+                    }
             Log.d(TAG, "changed state to $stateString playWhenReady: $playWhenReady")
         }
     }
