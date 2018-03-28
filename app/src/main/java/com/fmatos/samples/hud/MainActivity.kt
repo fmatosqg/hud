@@ -8,10 +8,7 @@ import android.text.format.Formatter
 import android.view.View
 import com.bumptech.glide.Glide
 import com.fmatos.samples.hud.io.controller.ServoController
-import com.fmatos.samples.hud.service.AlertService
-import com.fmatos.samples.hud.service.CountdownService
-import com.fmatos.samples.hud.service.FontCache
-import com.fmatos.samples.hud.service.WallpaperService
+import com.fmatos.samples.hud.service.*
 import com.fmatos.samples.hud.utils.AndroidLogger
 import com.fmatos.samples.hud.utils.dagger.HudApplication
 import io.reactivex.Observable
@@ -108,6 +105,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         addWallpapers()
+
+        addGlow()
     }
 
     private fun addWallpapers() {
@@ -223,6 +222,13 @@ class MainActivity : AppCompatActivity() {
 
         ip += Formatter.formatIpAddress(wifiInfo.ipAddress)
 
+    }
+
+    private fun addGlow(){
+        val gh = GlowHelper(this)
+
+//        val yang = yang
+        gh.setBackgroundGlow(yang,R.drawable.yang,resources.getColor(R.color.lightRed))
     }
 }
 
