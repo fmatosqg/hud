@@ -46,30 +46,37 @@ class MainActivity : AppCompatActivity() {
 
     private val disposables = CompositeDisposable()
 
-    @Inject lateinit
+    @Inject
+    lateinit
     var androidLogger: AndroidLogger
 
-    @Inject lateinit
+    @Inject
+    lateinit
     var wallpaperService: WallpaperService
 
-    @Inject lateinit
+    @Inject
+    lateinit
     var fontCache: FontCache
 
-    @Inject lateinit var
+    @Inject
+    lateinit var
             timezone: DateTimeZone
 
-    @Inject lateinit var
+    @Inject
+    lateinit var
             alertService: AlertService
 
-    @Inject lateinit var
+    @Inject
+    lateinit var
             countdownService: CountdownService
 
-    @Inject lateinit var
+    @Inject
+    lateinit var
             servoController: ServoController
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        VideoActivity.startActivity(this)
+//        VideoActivity.startActivity(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -139,7 +146,7 @@ class MainActivity : AppCompatActivity() {
             timeView = timeView.replace(':', ' ')
         }
 
-        servoAngle = if (textBlink) 90 else 80
+        servoAngle = if (textBlink) 30 else 150
 
         servoController.setPosition(servoAngle.toDouble())
 

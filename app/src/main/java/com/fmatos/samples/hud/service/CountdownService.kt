@@ -76,5 +76,10 @@ data class CountdownMessage(val message: String) {
     constructor(date: String, message: String) : this(message) {
 
         localDate = DateTime.parse(date, dateFormat)
+        localDate = localDate.withYear(DateTime().year)
+
+        if (localDate.isBeforeNow) {
+            localDate = localDate.plusYears(1)
+        }
     }
 }

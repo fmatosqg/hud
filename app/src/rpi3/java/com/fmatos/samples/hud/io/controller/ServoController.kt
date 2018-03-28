@@ -69,7 +69,7 @@ class ServoController {
 
         val dutyCycle = pulseLenghtMs / periodMs * 100.0
 
-        Log.i(TAG, "Duty cycle = $dutyCycle pulse lenght = $pulseLenghtMs")
+        Log.i(TAG, "Duty cycle = ${dutyCycle.format(2)} pulse lenght = ${pulseLenghtMs.format(2)}")
 
         try {
             pin.setPwmDutyCycle(dutyCycle)
@@ -91,3 +91,5 @@ class ServoController {
             get() = "PWM1"
     }
 }
+
+fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)

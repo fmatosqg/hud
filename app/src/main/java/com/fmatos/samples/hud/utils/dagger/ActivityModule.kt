@@ -47,6 +47,6 @@ class ActivityModule(private val application: Application) {
     @Provides
     @Singleton
     fun providesServoController(): ServoController {
-        return ServoController(ServoController.pwm0Pin)
+        return ServoController(ServoController.pwm1Pin)
     }
 }
