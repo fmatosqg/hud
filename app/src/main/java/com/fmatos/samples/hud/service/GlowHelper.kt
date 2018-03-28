@@ -5,23 +5,34 @@ import android.content.ContextWrapper
 import android.graphics.*
 import android.graphics.BlurMaskFilter.Blur
 import android.support.annotation.ColorInt
-import android.widget.ImageView
+import android.view.View
+import android.graphics.drawable.BitmapDrawable
+import android.support.annotation.DrawableRes
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.graphics.Bitmap
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.graphics.drawable.Drawable
+import com.fmatos.samples.hud.R
 
 
 class GlowHelper(context: Context) : ContextWrapper(context) {
 
 
-    fun setBackgroundGlow(imgview: ImageView, imageicon: Int, @ColorInt glowColor: Int) {
+    fun setBackgroundGlow(view: View, @DrawableRes drawableRes: Int, @ColorInt glowColor: Int) {
         // An added margin to the initial image
-        val margin = 24
-        val halfMargin = (margin / 2).toFloat()
+
+        val halfMargin = view.resources.getDimension(R.dimen.cardMargin)
+        val margin = halfMargin.toInt() * 2
         // the glow radius
-        val glowRadius = 40
+        val glowRadius = halfMargin * 1.2 // this is a magic number, don't change it !!!
 
-        // The original image to use
-        val src = BitmapFactory.decodeResource(getResources(), imageicon)
+        val drawable = view.resources.getDrawable(drawableRes, null)
 
-        // extract the alpha from the source image
+        val src = drawableToBitmap(drawable = drawable)
+
+        // extract the alpha layer from the source image
         val alpha = src.extractAlpha()
 
         // The output bitmap (with the icon + glow)
@@ -34,7 +45,7 @@ class GlowHelper(context: Context) : ContextWrapper(context) {
         paint.color = glowColor
 
         // outer glow
-        paint.maskFilter = BlurMaskFilter(glowRadius.toFloat(), Blur.OUTER)//For Inner glow set Blur.INNER
+        paint.maskFilter = BlurMaskFilter(glowRadius.toFloat(), Blur.OUTER)
         canvas.drawBitmap(alpha, halfMargin, halfMargin, paint)
 
         // original icon
@@ -44,8 +55,20 @@ class GlowHelper(context: Context) : ContextWrapper(context) {
 //        canvas.drawBitmap(alpha, halfMargin, halfMargin, paint)
 
 
-        imgview.setImageBitmap(bmp)
+        view.background = BitmapDrawable(resources, bmp)
+    }
 
+    private fun drawableToBitmap(drawable: Drawable): Bitmap {
 
+        if (drawable is BitmapDrawable) {
+            return drawable.bitmap
+        }
+
+        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+
+        return bitmap
     }
 }

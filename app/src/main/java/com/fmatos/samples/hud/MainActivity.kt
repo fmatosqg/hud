@@ -110,7 +110,6 @@ class MainActivity : AppCompatActivity() {
 
         addWallpapers()
 
-        addGlow()
     }
 
     private fun addWallpapers() {
@@ -192,6 +191,8 @@ class MainActivity : AppCompatActivity() {
                 countdown_text.visibility = View.GONE
             }
         }
+
+        addGlow()
     }
 
     /**
@@ -279,10 +280,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addGlow() {
-//        val gh = GlowHelper(this)
+        val gh = GlowHelper(this)
 
-//        val yang = yang
-//        gh.setBackgroundGlow(yang, R.drawable.yang, resources.getColor(R.color.lightRed))
+        gh.setBackgroundGlow(container, R.drawable.rounded_rectangle, resources.getColor(R.color.glowingYellow, null))
+
     }
 }
 
