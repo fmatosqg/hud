@@ -5,6 +5,7 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.fmatos.samples.hud.io.controller.ServoController
@@ -145,7 +146,7 @@ class MainActivity : AppCompatActivity() {
             timeView = timeView.replace(':', ' ')
         }
 
-        servoAngle = if (textBlink) 30 else 150
+        servoAngle = getServoAngle()
 
         servoController.setPosition(servoAngle.toDouble())
 
@@ -190,6 +191,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Returns angle to the servo controller in degrees
+     */
+    private fun getServoAngle(): Int {
+
+        // for 50 minutes it stays down
+        // at minute 51 it goes all the way up
+        // from minute 51 to 59 it will go down until it's all down
+
+        val minute: Int = DateTime().minuteOfHour().get() + 18
+
+
+        val minAngle = 30.toFloat()
+        val maxAngle = 120.toFloat()
+
+        val angle: Float = when {
+
+            minute < 50 -> maxAngle
+            minute > 59 -> maxAngle
+
+            else -> {
+                val alpha = (maxAngle - minAngle) / 10.0f
+                minAngle + alpha * (minute - 50)
+            }
+        }
+
+        Log.i(TAG, "Servo angle will be ${angle.toInt()} on minute $minute ")
+
+        return angle.toInt()
+
+    }
+
 
     private fun updateModel(longTimed: Timed<Long>) {
 
@@ -224,11 +257,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun addGlow(){
+    private fun addGlow() {
         val gh = GlowHelper(this)
 
 //        val yang = yang
-        gh.setBackgroundGlow(yang,R.drawable.yang,resources.getColor(R.color.lightRed))
+        gh.setBackgroundGlow(yang, R.drawable.yang, resources.getColor(R.color.lightRed))
     }
 }
 
