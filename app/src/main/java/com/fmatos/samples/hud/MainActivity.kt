@@ -200,7 +200,7 @@ class MainActivity : AppCompatActivity() {
         // at minute 51 it goes all the way up
         // from minute 51 to 59 it will go down until it's all down
 
-        val minute: Int = DateTime().minuteOfHour().get() + 18
+        val minute: Int = DateTime().minuteOfHour().get()
 
 
         val minAngle = 30.toFloat()
@@ -258,10 +258,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addGlow() {
-        val gh = GlowHelper(this)
+//        val gh = GlowHelper(this)
 
 //        val yang = yang
-        gh.setBackgroundGlow(yang, R.drawable.yang, resources.getColor(R.color.lightRed))
+//        gh.setBackgroundGlow(yang, R.drawable.yang, resources.getColor(R.color.lightRed))
     }
 }
 
