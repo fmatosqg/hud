@@ -9,7 +9,10 @@ import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.fmatos.samples.hud.io.controller.ServoController
-import com.fmatos.samples.hud.service.*
+import com.fmatos.samples.hud.service.AlertService
+import com.fmatos.samples.hud.service.CountdownService
+import com.fmatos.samples.hud.service.FontCache
+import com.fmatos.samples.hud.service.WallpaperService
 import com.fmatos.samples.hud.utils.AndroidLogger
 import com.fmatos.samples.hud.utils.dagger.HudApplication
 import io.reactivex.Observable
@@ -196,24 +199,29 @@ class MainActivity : AppCompatActivity() {
      */
     private fun getServoAngle(): Int {
 
-        // for 50 minutes it stays down
-        // at minute 51 it goes all the way up
+        // for 49 minutes it stays down
+        // at minute 50 it slowly goes up
         // from minute 51 to 59 it will go down until it's all down
 
         val minute: Int = DateTime().minuteOfHour().get()
-
+        val second: Int = DateTime().secondOfMinute().get()
 
         val minAngle = 30.toFloat()
         val maxAngle = 120.toFloat()
 
         val angle: Float = when {
 
+            minute == 50 -> {
+                val alpha = (maxAngle - minAngle) / 60.0f
+                minAngle + alpha * (60 - second)
+            }
+
             minute < 50 -> maxAngle
             minute > 59 -> maxAngle
 
             else -> {
-                val alpha = (maxAngle - minAngle) / 10.0f
-                minAngle + alpha * (minute - 50)
+                val alpha = (maxAngle - minAngle) / 10.0f // everything happens over 10 minutes
+                minAngle + alpha * (minute - 50) // offset by 50 minutes
             }
         }
 
