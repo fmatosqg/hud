@@ -43,6 +43,7 @@ class ServoController {
             pin.setEnabled(true)
 
         } catch (e: IOException) {
+            Log.e("Servo Controller", "Can't initialize pin $pinName")
             e.printStackTrace()
         }
 
