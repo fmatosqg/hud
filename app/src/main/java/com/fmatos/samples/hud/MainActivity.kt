@@ -72,9 +72,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var
             servoController: ServoController
 
+    @Inject
+    lateinit var eyesController: EyesController
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
-//        VideoActivity.startActivity(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
