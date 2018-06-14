@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private var TAG: String = MainActivity::class.java.simpleName
+    private val TAG: String = MainActivity::class.java.simpleName
     private val INTERVAL_1_SECOND_MS: Long = 1000
 
     private var time: String = ""
@@ -202,7 +202,7 @@ class MainActivity : AppCompatActivity() {
         // at minute 50 it slowly goes up
         // from minute 51 to 59 it will go down until it's all down
 
-        val minute: Int = DateTime().minuteOfHour().get() - 8
+        val minute: Int = DateTime().minuteOfHour().get()
         val second: Int = DateTime().secondOfMinute().get()
 
         val minAngle = 30.toFloat()
@@ -224,7 +224,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        Log.i(TAG, "Servo angle will be ${angle.toInt()} on minute $minute ")
+        val isEyesControllerRunning =
+                when {
+                    minute > 59 -> false
+                    minute >= 50 -> true
+                    else -> false
+                }
+
+        if (isEyesControllerRunning) {
+            eyesController.start()
+        } else {
+            eyesController.stop()
+        }
+
+        Log.i(TAG, "Servo angle will be ${angle.toInt()} on minute $minute -- $isEyesControllerRunning")
 
         return angle.toInt()
 
