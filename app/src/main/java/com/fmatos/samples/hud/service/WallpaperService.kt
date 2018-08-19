@@ -35,6 +35,8 @@ class WallpaperService {
     //    private val ALBUM_SPACEX_TWITTER = "https://www.flickr.com/photos/spacex/"
     private val ALBUM_SPACEX_FLICKR = "https://www.flickr.com/services/feeds/photos_public.gne?id=130608600@N05"
     private val ALBUM_REDDIT_EARTH_P = "https://www.reddit.com/r/EarthPorn/.rss"
+    private val ALBUM_PIXELART = "https://www.reddit.com/r/PixelArt/.rss"
+
 
     private val androidLogger: AndroidLogger
     private val retrofit: Retrofit
@@ -61,7 +63,7 @@ class WallpaperService {
 
 
     /**
-     * provides coroutine to watch available amount of items inside the stream
+     * watch available amount of items inside the stream
      * and trigger server fetch when count is too low
      */
     private fun updateListObservable(): Observable<String> {
@@ -71,17 +73,15 @@ class WallpaperService {
                 .timeInterval()
 
 
-//        var zipper: BiFunction<in Timed<Long>, in String, out String>
         var zipper = BiFunction { _: Timed<Long>, url: String -> url }
 
 
-        val fastUrls = buildListObservable(ALBUM_REDDIT_EARTH_P)
+        val fastUrls = buildListObservable(ALBUM_PIXELART)
                 .repeatWhen { _: Observable<Any> ->
                     androidLogger.i(TAG, "On stream is running empty")
                     throttle.debounce(DEBOUNCE_SECONDS, TimeUnit.SECONDS)
                 }
-                .map {
-                    it ->
+                .map { it ->
                     itemsCount++
                     it
                 }
