@@ -1,17 +1,23 @@
-package com.fmatos.samples.hud.service
+package com.fmatos.samples.hud.io.controller
 
 import android.util.Log
-import com.fmatos.samples.hud.MainActivity
 import com.google.android.things.pio.Gpio
 import com.google.android.things.pio.PeripheralManagerService
 
-// add a cable to pin, followed by 330 ohm and 2 red leds
+
+/**
+ * add a cable to pin BCM 26, followed by 330 ohm and 2 red leds
+ */
 class EyesController {
+
+
+    companion object {
+        const val PIN = "BCM26"
+    }
 
     private val TAG: String = EyesController::class.java.simpleName
 
     private var pin: Gpio? = null
-    private var pinValue = true
 
     private var dutyCycle = 100 // percentage, ranges from 0 to 100
 
@@ -29,7 +35,7 @@ class EyesController {
                 Log.i(TAG, "EyesController start")
                 isRunning = true
                 val service = PeripheralManagerService()
-                pin = service.openGpio("BCM26")
+                pin = service.openGpio(PIN)
                         .also { it.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH) }
 
                 Thread({ worker() })

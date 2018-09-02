@@ -8,6 +8,7 @@ import android.text.format.Formatter
 import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
+import com.fmatos.samples.hud.io.controller.EyesController
 import com.fmatos.samples.hud.io.controller.ServoController
 import com.fmatos.samples.hud.service.*
 import com.fmatos.samples.hud.utils.AndroidLogger

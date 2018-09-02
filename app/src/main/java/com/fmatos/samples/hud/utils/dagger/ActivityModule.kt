@@ -1,8 +1,8 @@
 package com.fmatos.samples.hud.utils.dagger
 
 import android.app.Application
+import com.fmatos.samples.hud.io.controller.EyesController
 import com.fmatos.samples.hud.io.controller.ServoController
-import com.fmatos.samples.hud.service.EyesController
 import com.fmatos.samples.hud.service.WallpaperService
 import com.fmatos.samples.hud.utils.AndroidLogger
 import dagger.Module
