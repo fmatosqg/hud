@@ -118,6 +118,15 @@ class MainActivity : AppCompatActivity() {
         var wallpaperObserver: Observable<String> = wallpaperService
                 .getObservable()
 
+        val initialUrl="https://i.redd.it/g4mxvyxwqi121.png"
+
+        Glide.with(this)
+                .load(initialUrl)
+                .centerCrop()
+                .error(R.drawable.rocket_diamonds)
+                .into(background_img)
+
+
         disposables.add(wallpaperObserver.subscribeBy(
                 onNext = { url ->
                     androidLogger.i(TAG, "On glide url ${url}")
