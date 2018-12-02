@@ -14,14 +14,19 @@
         tools:src="@drawable/rocket_diamonds" />
 
     <ImageView
-        android:layout_width="200dp"
         android:id="@+id/yang"
+        android:layout_width="200dp"
         android:layout_height="200dp"
         android:background="@null" />
 
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/youtube"
+        android:layout_width="300dp"
+        android:layout_height="300dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent"
         android:background="@color/transparent"
         android:gravity="center"

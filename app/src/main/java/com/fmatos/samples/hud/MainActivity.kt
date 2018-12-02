@@ -3,7 +3,6 @@ package com.fmatos.samples.hud
 import android.content.Context
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
 import android.util.Log
 import android.view.View
@@ -13,6 +12,9 @@ import com.fmatos.samples.hud.io.controller.ServoController
 import com.fmatos.samples.hud.service.*
 import com.fmatos.samples.hud.utils.AndroidLogger
 import com.fmatos.samples.hud.utils.dagger.HudApplication
+import com.google.android.youtube.player.YouTubeBaseActivity
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -27,7 +29,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : YouTubeBaseActivity() {
 
     private val TAG: String = MainActivity::class.java.simpleName
     private val INTERVAL_1_SECOND_MS: Long = 1000
@@ -111,6 +113,27 @@ class MainActivity : AppCompatActivity() {
         addWallpapers()
 
         addGlow()
+
+        testPlayYoutube()
+    }
+
+    private fun testPlayYoutube() {
+
+        youtube.initialize(BuildConfig.YOUTUBE_API_KEY,
+                object : YouTubePlayer.OnInitializedListener {
+                    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, player: YouTubePlayer?, p2: Boolean) {
+
+                        androidLogger.i(TAG, "Youtube started ok")
+
+                        player?.loadVideo("qREKP9oijWI") // this  video is for testing
+                        player?.play()
+                    }
+
+                    override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+
+                        androidLogger.e(TAG, "Youube failed to start")
+                    }
+                })
     }
 
     private fun addWallpapers() {
@@ -118,7 +141,7 @@ class MainActivity : AppCompatActivity() {
         var wallpaperObserver: Observable<String> = wallpaperService
                 .getObservable()
 
-        val initialUrl="https://i.redd.it/g4mxvyxwqi121.png"
+        val initialUrl = "https://i.redd.it/g4mxvyxwqi121.png"
 
         Glide.with(this)
                 .load(initialUrl)
