@@ -1,10 +1,8 @@
 package com.fmatos.samples.hud.io.controller
 
 import android.util.Log
-
-import com.google.android.things.pio.PeripheralManagerService
+import com.google.android.things.pio.PeripheralManager
 import com.google.android.things.pio.Pwm
-
 import java.io.IOException
 
 /**
@@ -35,7 +33,7 @@ class ServoController {
     private fun setup(pinName: String) {
         try {
 
-            val service = PeripheralManagerService()
+            val service = PeripheralManager.getInstance()
             pin = service.openPwm(pinName)
 
             pin.setPwmFrequencyHz(1000.0 / periodMs)

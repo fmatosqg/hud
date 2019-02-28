@@ -96,7 +96,7 @@ dependencies {
 
     implementation 'com.google.android.exoplayer:exoplayer:2.6.1'
 
-    rpi3CompileOnly 'com.google.android.things:androidthings:0.6-devpreview'
+    rpi3CompileOnly 'com.google.android.things:androidthings:1.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.8.47'

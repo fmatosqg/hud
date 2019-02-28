@@ -2,7 +2,7 @@ package com.fmatos.samples.hud.io.controller
 
 import android.util.Log
 import com.google.android.things.pio.Gpio
-import com.google.android.things.pio.PeripheralManagerService
+import com.google.android.things.pio.PeripheralManager
 
 
 /**
@@ -34,7 +34,8 @@ class EyesController {
             synchronized(isRunning) {
                 Log.i(TAG, "EyesController start")
                 isRunning = true
-                val service = PeripheralManagerService()
+
+                val service = PeripheralManager.getInstance()
                 pin = service.openGpio(PIN)
                         .also { it.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH) }
 
