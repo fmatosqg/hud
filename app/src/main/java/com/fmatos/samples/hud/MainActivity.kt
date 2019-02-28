@@ -10,6 +10,7 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.fmatos.samples.hud.io.controller.EyesController
 import com.fmatos.samples.hud.io.controller.ServoController
+import com.fmatos.samples.hud.io.controller.VibratorController
 import com.fmatos.samples.hud.service.*
 import com.fmatos.samples.hud.utils.AndroidLogger
 import com.fmatos.samples.hud.utils.dagger.HudApplication
@@ -76,6 +77,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var eyesController: EyesController
 
+    @Inject
+    lateinit var vibratorController: VibratorController
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -140,6 +144,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateScreen() {
 
+
+
         textBlink = !textBlink
 
         var timeView: String = time
@@ -151,6 +157,8 @@ class MainActivity : AppCompatActivity() {
         servoAngle = getServoAngle()
 
         servoController.setPosition(servoAngle.toDouble())
+
+        processVibration()
 
         clock_date_text.text = date
 
@@ -193,6 +201,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         addGlow()
+    }
+
+    private fun processVibration() {
+
+        val dateTime = DateTime.now().toDateTime(timezone)
+        val seconds= dateTime.secondOfMinute().get()
+
+        if ( seconds == 0 ) {
+            vibratorController.buzz(2000)
+        }
     }
 
     /**

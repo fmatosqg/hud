@@ -3,6 +3,7 @@ package com.fmatos.samples.hud.utils.dagger
 import android.app.Application
 import com.fmatos.samples.hud.io.controller.EyesController
 import com.fmatos.samples.hud.io.controller.ServoController
+import com.fmatos.samples.hud.io.controller.VibratorController
 import com.fmatos.samples.hud.service.WallpaperService
 import com.fmatos.samples.hud.utils.AndroidLogger
 import dagger.Module
@@ -48,13 +49,19 @@ class ActivityModule(private val application: Application) {
     @Provides
     @Singleton
     fun providesServoController(): ServoController {
-        return ServoController(ServoController.pwm1Pin)
+        return ServoController(ServoController.pwm0Pin)
     }
 
     @Provides
     @Singleton
     fun providesEyesController(): EyesController {
         return EyesController()
+    }
+
+    @Provides
+    @Singleton
+    fun providesVibrationController(): VibratorController {
+        return VibratorController()
     }
 
 }
