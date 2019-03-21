@@ -32,3 +32,7 @@ hdmi_group=2
 hdmi_mode=87
 hdmi_cvt 800 480 60 6 0 0 0
 ```
+
+# Build release for Android Things console 
+- `./gradlew assembleRpi3Release`
+- upload to https://partner.android.com/things/console/?pli=1#/
