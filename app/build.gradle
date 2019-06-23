@@ -18,8 +18,8 @@ android {
         applicationId "com.fmatos.samples.hud"
         minSdkVersion 24
         targetSdkVersion 26
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 8
+        versionName "1.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
