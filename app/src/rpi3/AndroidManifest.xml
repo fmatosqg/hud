@@ -3,7 +3,6 @@
     package="com.fmatos.samples.hud">
 
     <uses-permission android:name="com.google.android.things.permission.USE_PERIPHERAL_IO" />
-    <uses-permission android:name="com.google.android.things.permission.USE_PERIPHERAL_IOddd" />
 
     <application>
 
