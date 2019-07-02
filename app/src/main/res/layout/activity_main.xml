@@ -30,9 +30,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_weight="0.7"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
+            android:layout_weight="0.7"
             android:padding="@dimen/cardMargin">
 
             <LinearLayout
@@ -52,7 +52,6 @@
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
                     android:padding="10dp"
-                    android:text="asdas"
                     android:textSize="40sp"
                     android:visibility="gone"
                     tools:text="Test"

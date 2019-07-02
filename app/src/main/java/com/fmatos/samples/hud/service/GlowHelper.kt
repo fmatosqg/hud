@@ -47,6 +47,11 @@ class GlowHelper(context: Context) : ContextWrapper(context) {
         // outer glow
         paint.maskFilter = BlurMaskFilter(glowRadius.toFloat(), Blur.OUTER)
         canvas.drawBitmap(alpha, halfMargin, halfMargin, paint)
+        canvas.drawBitmap(alpha, halfMargin, halfMargin, paint)
+
+        // make for a stronger brighter margin
+        paint.maskFilter = BlurMaskFilter(20f, Blur.OUTER)
+        canvas.drawBitmap(alpha, halfMargin, halfMargin, paint)
 
         // original icon
         canvas.drawBitmap(src, halfMargin, halfMargin, null)

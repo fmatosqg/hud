@@ -2,5 +2,5 @@
 <resources>
 
     <!--<dimen name="cardMar-->
-    <dimen name="cardMargin">10dp</dimen>
+    <dimen name="cardMargin">20dp</dimen>
 </resources>
