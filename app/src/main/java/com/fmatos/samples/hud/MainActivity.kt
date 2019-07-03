@@ -145,7 +145,6 @@ class MainActivity : AppCompatActivity() {
     private fun updateScreen() {
 
 
-
         textBlink = !textBlink
 
         var timeView: String = time
@@ -200,15 +199,39 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        antiBurnIn()
         addGlow()
+    }
+
+    /**
+     * Moves the container slightly to avoid display burn in
+     */
+    private fun antiBurnIn() {
+        val minute = DateTime
+                .now()
+                .toDateTime(timezone)
+                .minuteOfHour()
+                .get()
+
+        val offsetX = ((minute % 10L) - 5) * 20f
+        val offsetY = ((minute / 6) - 3) * 20f
+
+        container
+                .animate()
+                .translationX(offsetX)
+                .translationY(offsetY)
+                .setDuration(300)
+                .start()
+
+
     }
 
     private fun processVibration() {
 
         val dateTime = DateTime.now().toDateTime(timezone)
-        val seconds= dateTime.secondOfMinute().get()
+        val seconds = dateTime.secondOfMinute().get()
 
-        if ( seconds == 0 ) {
+        if (seconds == 0) {
             vibratorController.buzz(2000)
         }
     }
@@ -285,6 +308,7 @@ class MainActivity : AppCompatActivity() {
         alertText = alertService.getAlert()
 
         countdownText = countdownService.getText()
+
 
     }
 
