@@ -8,6 +8,7 @@ import android.text.format.Formatter
 import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.fmatos.samples.hud.io.controller.EyesController
 import com.fmatos.samples.hud.io.controller.ServoController
 import com.fmatos.samples.hud.io.controller.VibratorController
@@ -121,19 +122,22 @@ class MainActivity : AppCompatActivity() {
         var wallpaperObserver: Observable<String> = wallpaperService
                 .getObservable()
 
-        disposables.add(wallpaperObserver.subscribeBy(
-                onNext = { url ->
-                    androidLogger.i(TAG, "On glide url ${url}")
-                    Glide.with(this)
-                            .load(url)
-                            .centerCrop()
-                            .error(R.drawable.rocket_diamonds)
-                            .into(background_img)
-                },
-                onComplete = { androidLogger.i(TAG, "On glide Found complete") },
-                onError = { androidLogger.i(TAG, "On glide error") }
+        disposables.add(
+                wallpaperObserver
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeBy(
+                                onNext = { url ->
+                                    androidLogger.i(TAG, "On glide url ${url}")
+                                    Glide.with(this)
+                            .setDefaultRequestOptions(RequestOptions().centerCrop().error(R.drawable.rocket_diamonds))
+                                            .load(url)
+                                            .into(background_img)
 
-        ))
+                                },
+                                onComplete = { androidLogger.i(TAG, "On glide Found complete") },
+                                onError = { androidLogger.i(TAG, "On glide error") }
+
+                        ))
     }
 
 
