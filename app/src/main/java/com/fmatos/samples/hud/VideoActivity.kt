@@ -6,11 +6,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.google.android.exoplayer2.*
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.exoplayer2.ExoPlayerFactory
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
@@ -95,8 +97,11 @@ class VideoActivity : AppCompatActivity() {
             // a factory to create an AdaptiveVideoTrackSelection
             val adaptiveTrackSelectionFactory = AdaptiveTrackSelection.Factory(BANDWIDTH_METER)
             // using a DefaultTrackSelector with an adaptive video selection factory
-            player = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this),
-                    DefaultTrackSelector(adaptiveTrackSelectionFactory), DefaultLoadControl())
+//            player = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this),
+//                    DefaultTrackSelector(adaptiveTrackSelectionFactory), DefaultLoadControl())
+
+            player = ExoPlayerFactory.newSimpleInstance(this,
+                    DefaultTrackSelector(adaptiveTrackSelectionFactory))
             player!!.addListener(componentListener)
             playerView!!.player = player
             player!!.playWhenReady = playWhenReady
@@ -107,10 +112,11 @@ class VideoActivity : AppCompatActivity() {
 //        url = "http://techslides.com/demos/sample-videos/small.mp4"
 //        url = "http://techslides.com/demos/sample-videos/small.webm"
 //        url = "http://techslides.com/demos/sample-videos/small.3gp"
-//        url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+        url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+        url = "https://wowzaprod100-i.akamaihd.net/hls/live/254872/226ef637/playlist.m3u8"
 //        url = "http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"
 
-        url = getString(R.string.media_url_mp4)
+//        url = getString(R.string.media_url_mp4)
 
         val mediaSource = buildMediaSource1(Uri.parse(url))
         player!!.repeatMode = Player.REPEAT_MODE_ONE

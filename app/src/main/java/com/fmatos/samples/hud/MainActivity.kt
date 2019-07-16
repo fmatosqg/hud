@@ -3,9 +3,9 @@ package com.fmatos.samples.hud
 import android.content.Context
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.text.format.Formatter
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.fmatos.samples.hud.io.controller.ServoController
 import com.fmatos.samples.hud.service.AlertService
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-//        VideoActivity.startActivity(this)
+        VideoActivity.startActivity(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
