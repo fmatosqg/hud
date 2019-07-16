@@ -45,7 +45,7 @@ class ServoController {
 
         val dutyCycle = pulseLenghtMs / periodMs * 100.0
 
-        Log.i(TAG, "Simulated Duty cycle = $dutyCycle pulse lenght = $pulseLenghtMs")
+//        Log.i(TAG, "Simulated Duty cycle = $dutyCycle pulse lenght = $pulseLenghtMs")
 
     }
 

@@ -7,21 +7,25 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.audio.AudioRendererEventListener
+import com.google.android.exoplayer2.extractor.ts.DefaultTsPayloadReaderFactory.FLAG_ALLOW_NON_IDR_KEYFRAMES
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
+import com.google.android.exoplayer2.source.dash.DashMediaSource
+import com.google.android.exoplayer2.source.hls.DefaultHlsDataSourceFactory
+import com.google.android.exoplayer2.source.hls.DefaultHlsExtractorFactory
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView
+import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultLoadErrorHandlingPolicy
 import com.google.android.exoplayer2.util.Util
+import com.google.android.exoplayer2.video.VideoRendererEventListener
 
 class VideoActivity : AppCompatActivity() {
 
@@ -32,12 +36,11 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
-    // bandwidth meter to measure and estimate bandwidth
-    private val BANDWIDTH_METER = DefaultBandwidthMeter()
     private val TAG = "PlayerActivity"
 
-    private var player: SimpleExoPlayer? = null
-    private var playerView: SimpleExoPlayerView? = null
+    private var player: ExoPlayer? = null
+    private lateinit var playerView: PlayerView
+    //    private var playerView: SimpleExoPlayerView? = null
     private var componentListener: ComponentListener? = null
 
     private var playbackPosition: Long = 0
@@ -53,21 +56,6 @@ class VideoActivity : AppCompatActivity() {
         componentListener = ComponentListener()
         playerView = findViewById(R.id.video_view)
 
-        Handler()
-                .postDelayed(Runnable() {
-                    Log.i(TAG, "Finish Activity")
-                    if (BuildConfig.DEBUG) {
-                        Toast.makeText(this@VideoActivity, "Finish activity", Toast.LENGTH_LONG).show()
-                    }
-                    finish()
-                }, timeoutMs)
-    }
-
-    public override fun onStart() {
-        super.onStart()
-        if (Util.SDK_INT > 23) {
-            initializePlayer()
-        }
     }
 
     public override fun onResume() {
@@ -85,27 +73,57 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
-    public override fun onStop() {
-        super.onStop()
-        if (Util.SDK_INT > 23) {
-            releasePlayer()
-        }
-    }
 
     private fun initializePlayer() {
         if (player == null) {
-            // a factory to create an AdaptiveVideoTrackSelection
-            val adaptiveTrackSelectionFactory = AdaptiveTrackSelection.Factory(BANDWIDTH_METER)
-            // using a DefaultTrackSelector with an adaptive video selection factory
-//            player = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this),
-//                    DefaultTrackSelector(adaptiveTrackSelectionFactory), DefaultLoadControl())
 
-            player = ExoPlayerFactory.newSimpleInstance(this,
-                    DefaultTrackSelector(adaptiveTrackSelectionFactory))
-            player!!.addListener(componentListener)
-            playerView!!.player = player
-            player!!.playWhenReady = playWhenReady
-            player!!.seekTo(currentWindow, playbackPosition)
+            val rf = DefaultRenderersFactory(this)
+
+            val renderersFactory: RenderersFactory = DefaultRenderersFactory(this)
+
+            val renderers: Array<Renderer> =
+                    renderersFactory.createRenderers(
+                            Handler(),
+                            object : VideoRendererEventListener {
+                                override fun onVideoInputFormatChanged(format: Format?) {
+                                    Log.i("TAGG", "New video format coming $format")
+                                }
+                            },
+                            object : AudioRendererEventListener {
+                                override fun onAudioDecoderInitialized(decoderName: String?, initializedTimestampMs: Long, initializationDurationMs: Long) {
+
+                                    Log.i("TAGG", "New audio format initialized $decoderName")
+                                }
+
+                                override fun onAudioInputFormatChanged(format: Format?) {
+
+                                    Log.i("TAGG", "New audio format coming $format")
+                                }
+                            },
+                            { cues ->
+                                Log.i("TAGG", "New cues $cues")
+                            },
+                            { metadata ->
+                                Log.i("TAGG", "Metadata $metadata")
+                            },
+                            null)
+
+
+            // changes stream quality according to available bandwidth
+//            val trackSel = AdaptiveTrackSelection.Factory().createTrackSelections(null, DefaultBandwidthMeter())
+//
+
+//            player = ExoPlayerFactory.newInstance(
+//                    this,
+//                    renderers,
+//                    DefaultTrackSelector())
+
+            player = ExoPlayerFactory.newSimpleInstance(this)
+
+            player?.addListener(componentListener)
+            playerView.player = player
+            player?.playWhenReady = playWhenReady
+            player?.seekTo(currentWindow, playbackPosition)
         }
 
         var url = "https://v.cdn.vine.co/r/videos/C40B136F021365174982178762752_53f4484ad8e.25.1.ADDA1E67-CF16-4C3B-901A-DE068DE26134.mp4"
@@ -119,8 +137,9 @@ class VideoActivity : AppCompatActivity() {
 //        url = getString(R.string.media_url_mp4)
 
         val mediaSource = buildMediaSource1(Uri.parse(url))
-        player!!.repeatMode = Player.REPEAT_MODE_ONE
-        player!!.prepare(mediaSource, true, true)
+        player?.repeatMode = Player.REPEAT_MODE_ONE
+        player?.prepare(mediaSource, true, true)
+
     }
 
 
@@ -129,8 +148,8 @@ class VideoActivity : AppCompatActivity() {
             playbackPosition = player!!.currentPosition
             currentWindow = player!!.currentWindowIndex
             playWhenReady = player!!.playWhenReady
-            player!!.removeListener(componentListener)
-            player!!.release()
+//            player!!.removeListener(componentListener)
+//            player!!.release()
             player = null
         }
     }
@@ -146,18 +165,36 @@ class VideoActivity : AppCompatActivity() {
         // these are reused for both media sources we create below
         val videoSource = ExtractorMediaSource.Factory(
                 DefaultHttpDataSourceFactory("exoplayer-codelab")).createMediaSource(uri)
+        val httpDataSource = DefaultHttpDataSourceFactory("exoplayer-codelab")
 
-        return ConcatenatingMediaSource(videoSource)
+        val hlsDatasource = DefaultHlsDataSourceFactory(httpDataSource)
+        val dash = DashMediaSource.Factory(httpDataSource)
+                .createMediaSource(uri)
+
+        val hlsExtractorFactory = DefaultHlsExtractorFactory(FLAG_ALLOW_NON_IDR_KEYFRAMES, true)
+        val hls = HlsMediaSource.Factory(hlsDatasource)
+                .setExtractorFactory(hlsExtractorFactory)
+                .setLoadErrorHandlingPolicy(DefaultLoadErrorHandlingPolicy())
+                .createMediaSource(uri)
+//        val v = HlsMediaSource
+
+        if (uri.toString().endsWith("mp4")) {
+            return videoSource
+        } else {
+            return ConcatenatingMediaSource(hls)
+        }
+//        return hls
+//        return dash
     }
 
     @SuppressLint("InlinedApi")
     private fun hideSystemUi() {
-        playerView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+//        playerView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+//                or View.SYSTEM_UI_FLAG_FULLSCREEN
+//                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
     }
 
     private inner class ComponentListener : Player.DefaultEventListener() {

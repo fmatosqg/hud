@@ -98,9 +98,10 @@ dependencies {
 //    implementation 'com.google.android.exoplayer:exoplayer-core:2.10.0'
 //    implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.0'
 
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.10.0'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.10.0'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.0'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.10.1'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.10.1'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.1'
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.10.1'
     implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.10.1'
 //
     rpi3CompileOnly 'com.google.android.things:androidthings:0.6-devpreview'
