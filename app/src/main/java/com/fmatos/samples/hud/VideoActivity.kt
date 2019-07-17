@@ -101,7 +101,8 @@ class VideoActivity : AppCompatActivity() {
                                 }
                             },
                             { cues ->
-                                Log.i("TAGG", "New cues $cues")
+                                val t = cues.foldRight("", { c, acc -> acc + c.text })
+                                Log.i("TAGG", "New cues $t $cues")
                             },
                             { metadata ->
                                 Log.i("TAGG", "Metadata $metadata")
@@ -112,13 +113,17 @@ class VideoActivity : AppCompatActivity() {
             // changes stream quality according to available bandwidth
 //            val trackSel = AdaptiveTrackSelection.Factory().createTrackSelections(null, DefaultBandwidthMeter())
 //
+            val loadControl = DefaultLoadControl()
+            player = ExoPlayerFactory.newInstance(
+                    this,
+                    renderers,
+                    DefaultTrackSelector())
 
-//            player = ExoPlayerFactory.newInstance(
-//                    this,
-//                    renderers,
-//                    DefaultTrackSelector())
-
-            player = ExoPlayerFactory.newSimpleInstance(this)
+            val trackSelector = DefaultTrackSelector()
+//
+//            player = ExoPlayerFactory.newSimpleInstance(this)
+//            player = ExoPlayerFactory.newSimpleInstance(this, rf, trackSelector, loadControl)
+            player = ExoPlayerFactory.newInstance(this, renderers, trackSelector, DefaultLoadControl())
 
             player?.addListener(componentListener)
             playerView.player = player
@@ -131,7 +136,7 @@ class VideoActivity : AppCompatActivity() {
 //        url = "http://techslides.com/demos/sample-videos/small.webm"
 //        url = "http://techslides.com/demos/sample-videos/small.3gp"
         url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
-        url = "https://wowzaprod100-i.akamaihd.net/hls/live/254872/226ef637/playlist.m3u8"
+//        url = "https://wowzaprod100-i.akamaihd.net/hls/live/254872/226ef637/playlist.m3u8"
 //        url = "http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"
 
 //        url = getString(R.string.media_url_mp4)
@@ -174,6 +179,7 @@ class VideoActivity : AppCompatActivity() {
         val hlsExtractorFactory = DefaultHlsExtractorFactory(FLAG_ALLOW_NON_IDR_KEYFRAMES, true)
         val hls = HlsMediaSource.Factory(hlsDatasource)
                 .setExtractorFactory(hlsExtractorFactory)
+                .setAllowChunklessPreparation(true) // makes things load faster
                 .setLoadErrorHandlingPolicy(DefaultLoadErrorHandlingPolicy())
                 .createMediaSource(uri)
 //        val v = HlsMediaSource
