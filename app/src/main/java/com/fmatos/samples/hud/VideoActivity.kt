@@ -122,8 +122,8 @@ class VideoActivity : AppCompatActivity() {
             val trackSelector = DefaultTrackSelector()
 //
 //            player = ExoPlayerFactory.newSimpleInstance(this)
-//            player = ExoPlayerFactory.newSimpleInstance(this, rf, trackSelector, loadControl)
-            player = ExoPlayerFactory.newInstance(this, renderers, trackSelector, DefaultLoadControl())
+            player = ExoPlayerFactory.newSimpleInstance(this, rf, trackSelector, loadControl)
+//            player = ExoPlayerFactory.newInstance(this, renderers, trackSelector, DefaultLoadControl())
 
             player?.addListener(componentListener)
             playerView.player = player
@@ -133,9 +133,9 @@ class VideoActivity : AppCompatActivity() {
 
         var url = "https://v.cdn.vine.co/r/videos/C40B136F021365174982178762752_53f4484ad8e.25.1.ADDA1E67-CF16-4C3B-901A-DE068DE26134.mp4"
 //        url = "http://techslides.com/demos/sample-videos/small.mp4"
-//        url = "http://techslides.com/demos/sample-videos/small.webm"
-//        url = "http://techslides.com/demos/sample-videos/small.3gp"
-        url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+        url = "http://techslides.com/demos/sample-videos/small.webm"
+        url = "http://techslides.com/demos/sample-videos/small.3gp"
+//        url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
 //        url = "https://wowzaprod100-i.akamaihd.net/hls/live/254872/226ef637/playlist.m3u8"
 //        url = "http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"
 
@@ -184,10 +184,12 @@ class VideoActivity : AppCompatActivity() {
                 .createMediaSource(uri)
 //        val v = HlsMediaSource
 
-        if (uri.toString().endsWith("mp4")) {
-            return videoSource
+        return if (uri.toString().endsWith("mp4")) {
+            videoSource
+        } else if (uri.toString().endsWith("m3u8")) {
+            ConcatenatingMediaSource(hls)
         } else {
-            return ConcatenatingMediaSource(hls)
+            videoSource
         }
 //        return hls
 //        return dash
