@@ -12,12 +12,12 @@ allOpen {
 apply from: 'secrets.gradle' // see README for instructions
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
     defaultConfig {
         applicationId "com.fmatos.samples.hud"
         minSdkVersion 24
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 8
         versionName "1.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -71,33 +71,41 @@ dependencies {
     def supportLibraryVersion = '28.0.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$supportLibraryVersion"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1")
 
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    // android x
+    implementation("androidx.appcompat:appcompat:1.0.2")
+    implementation("androidx.core:core-ktx:1.0.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.0-alpha3")
 
-    implementation 'com.github.bumptech.glide:glide:4.4.0'
+    // live data and data binding
+    def lifecycleVersion = "2.0.0"
+    implementation("androidx.lifecycle:lifecycle-extensions:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycleVersion")
+    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
+    kapt("com.android.databinding:compiler:3.1.4")
+
+
+    // other
+    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("com.jakewharton.timber:timber:4.7.1")
     implementation 'joda-time:joda-time:2.9.9'
 
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.1'
-    implementation 'io.reactivex:rxkotlin:2.0.0-RC1'
+    // dependency injection
+    def koinVersion = "1.0.2"
+    implementation("org.koin:koin-androidx-scope:$koinVersion")
+    implementation("org.koin:koin-androidx-viewmodel:$koinVersion")
 
-    def retrofitVersion = '2.2.0'
+    // network
+    def retrofitVersion = '2.3.0'
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
-    def daggerVersion = '2.15'
-    implementation "com.google.dagger:dagger-android:$daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-
-    implementation 'com.google.android.exoplayer:exoplayer:2.6.1'
-
+    // android things
     rpi3CompileOnly 'com.google.android.things:androidthings:1.0'
 
+    ///////////////////////////////
+    // test
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.8.47'
     testImplementation 'org.robolectric:robolectric:3.3.2'

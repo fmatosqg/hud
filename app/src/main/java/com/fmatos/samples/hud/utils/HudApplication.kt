@@ -1,6 +1,11 @@
-package com.fmatos.samples.hud.utils.dagger
+package com.fmatos.samples.hud.utils.koin
 
 import android.app.Application
+import com.fmatos.samples.hud.BuildConfig
+import org.koin.android.ext.android.startKoin
+import org.koin.android.logger.AndroidLogger
+import org.koin.log.EmptyLogger
+import timber.log.Timber
 
 
 /**
@@ -9,19 +14,22 @@ import android.app.Application
 
 class HudApplication : Application() {
 
-    companion object {
-        //  platformStatic allow access it from java code
-        @JvmStatic lateinit var graph: ApplicationComponent
-    }
 
     override fun onCreate() {
         super.onCreate()
 
-        graph = DaggerApplicationComponent
-                .builder()
-                .activityModule(ActivityModule(this))
-                .build()
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
 
-        graph.inject(this)
+        val koinLogger = if (BuildConfig.DEBUG) {
+            AndroidLogger()
+        } else {
+            EmptyLogger()
+        }
+
+        startKoin(androidContext = this,
+                modules = KoinModules.getInstance().getAllModules(),
+                logger = koinLogger)
     }
 }

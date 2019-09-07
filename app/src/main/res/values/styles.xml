@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/gray</item>
         <item name="colorPrimaryDark">@color/gray</item>
         <item name="colorAccent">@color/lightRed</item>
-        <item name="android:background">@color/black</item>
+        <item name="background">@color/black</item>
         <item name="android:textColor">@color/lightGreen</item>
         <item name="android:textColorSecondary">@color/lightRed</item>
     </style>
@@ -15,7 +15,5 @@
         <item name="android:windowBackground">@color/black</item>
     </style>
 
-    <style name="ExoMediaButton.Pause">
-        <item name="android:contentDescription">@string/exo_controls_pause_description</item>
-    </style>
+
 </resources>

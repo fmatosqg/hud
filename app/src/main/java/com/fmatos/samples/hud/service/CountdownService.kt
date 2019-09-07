@@ -3,22 +3,16 @@ package com.fmatos.samples.hud.service
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
-import javax.inject.Inject
 
 /**
  * Created by fmatos on 17/09/2017.
  */
-class CountdownService {
+class CountdownService(private val timezone: DateTimeZone) {
 
-    private var timezone: DateTimeZone
 
     private val countdownList: MutableList<CountdownMessage> = mutableListOf()
 
-
-    @Inject
-    constructor(timezone: DateTimeZone) {
-        this.timezone = timezone
-
+    init {
         safeAddCountdown("12/10/2018", "Birthday 1")
         safeAddCountdown("30/11/2018", "Birthday 2")
 

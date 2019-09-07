@@ -2,20 +2,16 @@ package com.fmatos.samples.hud.service
 
 import org.joda.time.DateTimeZone
 import org.joda.time.LocalTime
-import javax.inject.Inject
 
 /**
  * Created by fmatos on 13/09/2017.
  */
-class AlertService {
+class AlertService(private val timezone: DateTimeZone) {
 
-    private val timezone: DateTimeZone
     private val alertList: MutableList<Alert> = mutableListOf()
 
-    @Inject
-    constructor(timezone: DateTimeZone) {
-        this.timezone = timezone
 
+    init {
         alertList.add(Alert(20, 30, "Shower"))
         alertList.add(Alert(22, 0, "Bed Time"))
         alertList.add(Alert(12, 0, "Test"))

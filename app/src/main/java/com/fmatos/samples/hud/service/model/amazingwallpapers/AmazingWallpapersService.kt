@@ -1,6 +1,6 @@
 package com.fmatos.samples.hud.service.model.amazingwallpapers
 
-import io.reactivex.Single
+
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
@@ -14,5 +14,5 @@ interface AmazingWallpapersService {
 
     @Headers("User-Agent: AndroidThings-Rpi3-HUD")
     @GET("album/customrss?")
-    fun getAlbum(@Query("url") url: String): Single<Album>
+    suspend fun getAlbum(@Query("url") url: String): Album
 }
