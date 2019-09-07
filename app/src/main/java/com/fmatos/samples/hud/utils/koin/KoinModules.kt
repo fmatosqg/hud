@@ -46,7 +46,7 @@ class KoinModules {
      * Creates all injected objects necessary for activities, fragments and custom views
      */
     private val uiModule = module {
-        viewModel { MainViewModel() }
+        viewModel { MainViewModel(get()) }
     }
 
     /**

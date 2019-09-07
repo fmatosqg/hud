@@ -1,19 +1,28 @@
 package com.fmatos.samples.hud
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.format.DateTimeFormat
+import java.util.*
 
 /**
  * @author : Fabio de Matos
  * @since : 07/09/2019
  **/
-class MainViewModel : ViewModel() {
+class MainViewModel(private val timezone: DateTimeZone) : ViewModel() {
 
+    val date = MutableLiveData<String>()
     val time = MutableLiveData<String>()
+    val am = MutableLiveData<Int>()
+    val pm = MutableLiveData<Int>()
 
+    val wifi = MutableLiveData<String>()
 
     init {
         startTicking()
@@ -23,12 +32,52 @@ class MainViewModel : ViewModel() {
 
         viewModelScope.launch {
             while (true) {
+
                 delay(1_000)
-                time.postValue("1:00")
+                updateTime(true)
                 delay(1_000)
-                time.postValue("1 00")
+                updateTime(false)
             }
         }
+    }
+
+    private fun updateTime(isShowColon: Boolean) {
+
+        val dateTime = DateTime.now().toDateTime(timezone)
+        val locale = java.util.Locale("en", "AU")
+
+        DateTimeFormat.forPattern("h:mm")
+            .withLocale(locale).print(dateTime)
+            .let {
+                if (isShowColon)
+                    it.replace(':', ' ')
+                else it
+            }
+            .let { time.postValue(it) }
+
+
+        DateTimeFormat.forPattern("EEEEE, dd MMMM yyyy")
+            .withLocale(locale).print(dateTime)
+            .let {
+                date.postValue(it)
+            }
+
+        DateTimeFormat.forPattern("a")
+            .withLocale(locale).print(dateTime)
+            .let { it.equals("AM") }
+            .let { isAm ->
+
+                if (isAm) {
+                    View.VISIBLE to View.INVISIBLE
+                } else {
+                    View.GONE to View.VISIBLE
+                }
+            }
+            .let {
+                am.postValue(it.first)
+                pm.postValue(it.second)
+            }
+
     }
 
     /*
