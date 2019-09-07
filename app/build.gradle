@@ -22,6 +22,11 @@ android {
         versionName "1.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    dataBinding {
+        enabled = true
+    }
+
     signingConfigs {
         release {
             storeFile file("amazing-hud-key.keystore")
@@ -74,12 +79,14 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1")
 
     // android x
-    implementation("androidx.appcompat:appcompat:1.0.2")
-    implementation("androidx.core:core-ktx:1.0.1")
+//    implementation("androidx.appcompat:appcompat:1.0.2")
+//    implementation("androidx.core:core-ktx:1.0.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-alpha3")
 
+
     // live data and data binding
-    def lifecycleVersion = "2.0.0"
+    def lifecycleVersion = "2.2.0-alpha03"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-extensions:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycleVersion")
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")

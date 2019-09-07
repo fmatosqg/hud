@@ -2,16 +2,18 @@ package com.fmatos.samples.hud
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.fmatos.samples.hud.databinding.ActivityMainBinding
 import com.fmatos.samples.hud.service.GlowHelper
 import kotlinx.android.synthetic.main.activity_main.*
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private var servoAngle = 90
 
 
-//    private val mainViewModel: MainViewModel by viewModel()
+    private val mainViewModel: MainViewModel by viewModel()
 //    private val wallpaperService: WallpaperService by inject()
 
 
@@ -19,7 +21,12 @@ class MainActivity : AppCompatActivity() {
 
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
+
+        DataBindingUtil
+                .setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+                .also { it.lifecycleOwner = this }
+                .also { it.viewModel = mainViewModel }
 
     }
 

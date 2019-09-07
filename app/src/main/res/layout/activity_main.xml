@@ -78,52 +78,6 @@
                             tools:text="1 day to whatever" />
                     </FrameLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@color/transparent"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/label_am"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@color/transparent"
-                                android:text="AM"
-                                android:textSize="30dp" />
-
-                            <TextView
-                                android:id="@+id/label_pm"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@color/transparent"
-                                android:text="PM"
-                                android:textSize="30dp"
-                                tools:visibility="invisible" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/clock_time_text"
-                            android:layout_width="0dp"
-                            android:layout_height="120sp"
-                            android:layout_weight="1"
-                            android:background="@color/transparent"
-                            android:lines="1"
-                            android:paddingTop="10dp"
-                            android:textAlignment="center"
-                            android:textSize="410sp"
-                            app:autoSizeStepGranularity="1sp"
-                            app:autoSizeTextType="uniform"
-                            tools:text="!7:46" />
-                    </LinearLayout>
-
                     <TextView
                         android:id="@+id/test_text"
                         android:layout_width="match_parent"
@@ -156,6 +110,58 @@
                         app:autoSizeTextType="uniform"
                         tools:text="24/5 friday august 2017" />
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:id="@+id/label_am"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/transparent"
+                            android:text="AM"
+                            android:textSize="30dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/clock_time_text" />
+
+                        <TextView
+                            android:id="@+id/label_pm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/transparent"
+                            android:text="PM"
+                            android:textSize="30dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/label_am"
+                            tools:visibility="invisible" />
+
+                        <TextView
+                            android:id="@+id/clock_time_text"
+                            android:layout_width="0dp"
+                            android:layout_height="120sp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@color/transparent"
+                            android:fontFamily="@font/dseg7classic_light"
+                            android:lines="1"
+                            android:paddingTop="10dp"
+                            android:text="@{viewModel.time}"
+                            android:textAlignment="center"
+                            android:textSize="410sp"
+                            app:autoSizeStepGranularity="1sp"
+                            app:autoSizeTextType="uniform"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/label_am"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="!7:46" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </LinearLayout>
             </FrameLayout>
 
@@ -166,4 +172,13 @@
                 android:layout_weight="0.3" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.fmatos.samples.hud.MainViewModel" />
+    </data>
+
 </layout>

@@ -1,12 +1,35 @@
 package com.fmatos.samples.hud
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * @author : Fabio de Matos
  * @since : 07/09/2019
  **/
-class MainViewModel : ViewModel(){
+class MainViewModel : ViewModel() {
+
+    val time = MutableLiveData<String>()
+
+
+    init {
+        startTicking()
+    }
+
+    private fun startTicking() {
+
+        viewModelScope.launch {
+            while (true) {
+                delay(1_000)
+                time.postValue("1:00")
+                delay(1_000)
+                time.postValue("1 00")
+            }
+        }
+    }
 
     /*
 

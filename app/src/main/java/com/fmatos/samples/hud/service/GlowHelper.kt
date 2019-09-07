@@ -2,18 +2,16 @@ package com.fmatos.samples.hud.service
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.graphics.*
-import android.graphics.BlurMaskFilter.Blur
-import android.support.annotation.ColorInt
-import android.view.View
-import android.graphics.drawable.BitmapDrawable
-import android.support.annotation.DrawableRes
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
 import android.graphics.Bitmap
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
+import android.graphics.BlurMaskFilter
+import android.graphics.BlurMaskFilter.Blur
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.view.View
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import com.fmatos.samples.hud.R
 
 
