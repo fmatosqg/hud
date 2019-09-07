@@ -26,6 +26,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultLoadErrorHandlingPolicy
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoRendererEventListener
+import java.io.File
 import java.io.IOException
 
 class VideoActivity : AppCompatActivity() {
@@ -75,6 +76,10 @@ class VideoActivity : AppCompatActivity() {
     }
 
 
+    private lateinit var trackSelector: DefaultTrackSelector
+
+    private val DISABLE_AUDIO: Boolean = true
+
     private fun initializePlayer() {
         if (player == null) {
 
@@ -113,14 +118,8 @@ class VideoActivity : AppCompatActivity() {
             val loadControl = DefaultLoadControl()
 
 //
-            val trackSelector = DefaultTrackSelector()
+            trackSelector = DefaultTrackSelector()
 
-            trackSelector.setParameters(
-                    trackSelector.buildUponParameters()
-//                            .setExceedAudioConstraintsIfNecessary(false)
-//                            .setMaxAudioBitrate(100)
-                            .setRendererDisabled(1, true)
-            )
 
 //
 //            player = ExoPlayerFactory.newSimpleInstance(this)
@@ -137,12 +136,16 @@ class VideoActivity : AppCompatActivity() {
 //        url = "http://techslides.com/demos/sample-videos/small.mp4"
         url = "http://techslides.com/demos/sample-videos/small.webm"
 //        url = "http://techslides.com/demos/sample-videos/small.3gp"
-        url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
-//        url = "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8" // https://bitmovin.com/mpeg-dash-hls-examples-sample-streams/
-//        url = "https://wowzaprod100-i.akamaihd.net/hls/live/254872/226ef637/playlist.m3u8"
+        url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" // good source
+        url = "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8" // https://bitmovin.com/mpeg-dash-hls-examples-sample-streams/
+//        url = "https://wowzaprod100-i.akamaihd.net/hls/live/254872/226ef637/playlist.m3u8" // 404 error
 //        url = "http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"
 
 //        url = getString(R.string.media_url_mp4)
+
+//        url = Uri.fromFile(File("file")).toString()
+
+        url = "http://amazingdomain.net/sea.mp4"
 
         val mediaSource = buildMediaSource1(Uri.parse(url))
         player?.repeatMode = Player.REPEAT_MODE_ONE
@@ -158,7 +161,16 @@ class VideoActivity : AppCompatActivity() {
 
             when (player?.getRendererType(i)) {
                 C.TRACK_TYPE_VIDEO -> Log.i(TAG, "Rendere video $i")
-                C.TRACK_TYPE_AUDIO -> Log.i(TAG, "Rendere audio $i")
+                C.TRACK_TYPE_AUDIO -> {
+                    Log.i(TAG, "Rendere audio $i")
+                    if (DISABLE_AUDIO) {
+                        trackSelector.setParameters(
+                                trackSelector.buildUponParameters()
+                                        .setRendererDisabled(1, true)
+                        )
+                    }
+
+                }
                 C.TRACK_TYPE_METADATA -> Log.i(TAG, "Rendere metadata $i")
                 else -> {
                     Log.i(TAG, "Renderer ${player?.getRendererType(i)} -- $i")
@@ -168,16 +180,15 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
-
     inner class MyAnalyticsListener : AnalyticsListener {
 
         override fun onLoadError(eventTime: AnalyticsListener.EventTime?, loadEventInfo: MediaSourceEventListener.LoadEventInfo?, mediaLoadData: MediaSourceEventListener.MediaLoadData?, error: IOException?, wasCanceled: Boolean) {
 
-            Log.d(TAG, "what load $error")
+            Log.d(TAG, "what load $error") // captures status code 404 errors
         }
 
         override fun onDroppedVideoFrames(eventTime: AnalyticsListener.EventTime?, droppedFrames: Int, elapsedMs: Long) {
-            Log.d(TAG, "what dropped")
+            Log.d(TAG, "what dropped $droppedFrames frames")
 
         }
 
@@ -238,6 +249,8 @@ class VideoActivity : AppCompatActivity() {
 
 
     private fun buildMediaSource1(uri: Uri): MediaSource {
+
+//        https@ //medium.com/fungjai/playing-video-by-exoplayer-b97903be0b33
         // these are reused for both media sources we create below
         val videoSource = ExtractorMediaSource.Factory(
                 DefaultHttpDataSourceFactory("exoplayer-codelab")).createMediaSource(uri)
@@ -262,6 +275,7 @@ class VideoActivity : AppCompatActivity() {
         } else {
             videoSource
         }
+
 //        return hls
 //        return dash
     }
@@ -300,7 +314,7 @@ class VideoActivity : AppCompatActivity() {
         }
 
         override fun onPlayerError(error: ExoPlaybackException?) {
-            Log.d(TAG, "Error $error ")
+            Log.d(TAG, "Error $error ") // error status code 301
         }
 
         override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
