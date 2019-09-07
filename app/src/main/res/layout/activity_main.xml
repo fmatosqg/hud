@@ -26,10 +26,10 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="50dp"
-            android:padding="30dp"
             android:background="@color/transparentGray"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="30dp">
 
 
             <FrameLayout
@@ -113,8 +113,9 @@
                     android:layout_height="wrap_content"
                     android:text="AM"
                     android:textSize="30sp"
-
                     android:visibility="@{viewModel.am}"
+                    app:layout_constraintEnd_toStartOf="@id/clock_time_text"
+                    app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:visibility="visible" />
@@ -127,13 +128,14 @@
                     android:textSize="30sp"
                     android:visibility="@{viewModel.pm}"
                     app:layout_constraintBottom_toBottomOf="parent"
-
+                    app:layout_constraintEnd_toStartOf="@id/clock_time_text"
+                    app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/label_am"
                     tools:visibility="visible" />
 
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/clock_time_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -142,11 +144,12 @@
                     android:text="@{viewModel.time}"
                     android:textAlignment="center"
                     android:textSize="80sp"
+                    app:autoSizeMinTextSize="12sp"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeTextType="uniform"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/label_am"
+
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="!7:46" />
 
