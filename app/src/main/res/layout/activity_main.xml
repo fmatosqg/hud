@@ -13,6 +13,9 @@
             android:id="@+id/background_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{viewModel.imgUrl}"
+            app:placeholder="@{viewModel.imgPlaceholder}"
             tools:src="@drawable/rocket_diamonds" />
 
 
@@ -23,7 +26,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="50dp"
-            android:background="@color/transparent"
+            android:padding="30dp"
+            android:background="@color/transparentGray"
             android:gravity="center"
             android:orientation="vertical">
 

@@ -1,18 +1,15 @@
 package com.fmatos.samples.hud
 
 import com.fmatos.samples.hud.service.model.amazingwallpapers.Album
-import com.fmatos.samples.hud.service.model.amazingwallpapers.AmazingWallpapersService
+import com.fmatos.samples.hud.service.model.amazingwallpapers.WallpaperApi
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import org.hamcrest.Matchers
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mock
 import org.mockito.Mockito
 
 /**
@@ -21,7 +18,7 @@ import org.mockito.Mockito
 @RunWith(JUnit4::class)
 class NetworkTest {
 
-    private lateinit var amazingService: AmazingWallpapersService
+    private lateinit var amazingService: WallpaperApi
     private lateinit var mockedAlbum: Album
 
     @Before
@@ -31,9 +28,9 @@ class NetworkTest {
     }
 
 
-    private fun buildMockAmazingService(): AmazingWallpapersService {
+    private fun buildMockAmazingService(): WallpaperApi {
 
-        val service = Mockito.mock(AmazingWallpapersService::class.java)
+        val service = Mockito.mock(WallpaperApi::class.java)
         mockedAlbum = Mockito.mock(Album::class.java)
         val observableSuccess = Single.just(mockedAlbum)
 

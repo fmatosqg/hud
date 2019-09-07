@@ -10,24 +10,21 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private var servoAngle = 90
-
-
     private val mainViewModel: MainViewModel by viewModel()
-//    private val wallpaperService: WallpaperService by inject()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
 
         DataBindingUtil
                 .setContentView<ActivityMainBinding>(this, R.layout.activity_main)
                 .also { it.lifecycleOwner = this }
                 .also { it.viewModel = mainViewModel }
 
+        addGlow()
     }
 
 

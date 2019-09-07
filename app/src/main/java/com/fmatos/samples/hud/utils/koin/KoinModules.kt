@@ -1,16 +1,10 @@
 package com.fmatos.samples.hud.utils.koin
 
-import android.app.Application
 import android.util.Log
 import com.fmatos.samples.hud.MainViewModel
-import com.fmatos.samples.hud.io.controller.EyesController
-import com.fmatos.samples.hud.io.controller.ServoController
-import com.fmatos.samples.hud.io.controller.VibratorController
 import com.fmatos.samples.hud.service.WallpaperService
-import com.fmatos.samples.hud.service.model.amazingwallpapers.AmazingWallpapersService
-import com.google.gson.FieldNamingPolicy
+import com.fmatos.samples.hud.service.model.amazingwallpapers.WallpaperApi
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import org.joda.time.DateTimeZone
@@ -20,6 +14,7 @@ import org.koin.dsl.module.Module
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.Executors
 
 /**
  * @author : Fabio de Matos
@@ -46,7 +41,7 @@ class KoinModules {
      * Creates all injected objects necessary for activities, fragments and custom views
      */
     private val uiModule = module {
-        viewModel { MainViewModel(get()) }
+        viewModel { MainViewModel(get(), get()) }
     }
 
     /**
@@ -89,12 +84,15 @@ class KoinModules {
 
         factory {
             val retrofit = Retrofit.Builder()
-                    .baseUrl(SERVER_HOSTNAME)
-                    .addConverterFactory(GsonConverterFactory.create(get()))
-                    .client(get())
-                    .build()
 
-            retrofit.create(AmazingWallpapersService::class.java)
+                .client(get())
+                .baseUrl(SERVER_HOSTNAME)
+                .addConverterFactory(GsonConverterFactory.create())
+                .callbackExecutor(Executors.newSingleThreadExecutor())
+                .build()
+
+
+            retrofit.create(WallpaperApi::class.java)
         }
 
 
