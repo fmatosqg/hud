@@ -23,7 +23,6 @@ class WallpaperService(private val wallpaperApi: WallpaperApi) : KoinComponent {
 
         val albumUrl = ALBUM_PIXELART
 
-
         return wallpaperApi.getAlbum(albumUrl)
             .body()
             ?.also {

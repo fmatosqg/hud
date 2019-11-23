@@ -1,6 +1,8 @@
 package com.fmatos.samples.hud
 
 import android.graphics.drawable.Drawable
+import android.text.format.Formatter
+import android.text.format.Formatter.formatIpAddress
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -11,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.fmatos.samples.hud.io.controller.ServoController
 import com.fmatos.samples.hud.service.WallpaperService
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -19,14 +22,18 @@ import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat
 import timber.log.Timber
+import java.net.Inet4Address
+import java.net.InetAddress
 
 /**
  * @author : Fabio de Matos
  * @since : 07/09/2019
  **/
+@FlowPreview
 class MainViewModel(
     private val timezone: DateTimeZone,
-    private val wallpaperService: WallpaperService
+    private val wallpaperService: WallpaperService,
+    private val dataRepository: DataRepository
 ) : ViewModel() {
 
     val date = MutableLiveData<String>()
@@ -60,6 +67,13 @@ class MainViewModel(
 
         viewModelScope.launch {
             while (true) {
+                updateWifi()
+                delay(60_000)
+            }
+        }
+
+        viewModelScope.launch {
+            while (true) {
                 updateImage()
             }
         }
@@ -67,6 +81,19 @@ class MainViewModel(
 
     }
 
+    private fun updateWifi() {
+
+        dataRepository.getWifiInfo()
+            .let {
+
+                @Suppress("DEPRECATION")
+                val address = formatIpAddress(it?.ipAddress ?: 0)
+                "Wifi: %s - %s".format(it?.ssid, address)
+            }
+            .let { wifi.postValue(it) }
+    }
+
+    @FlowPreview
     private suspend fun updateImage() {
 
         wallpaperService
@@ -74,7 +101,7 @@ class MainViewModel(
             .asFlow()
             .collect {
                 imgUrl.postValue(it)
-                Timber.d("adapter 11 -- $it")
+                Timber.v("adapter 11 -- $it")
                 delay(60_000)
             }
     }
@@ -117,18 +144,6 @@ class MainViewModel(
             }
 
     }
-
-
-//    private fun getWifiIp() {
-//         getSystemService(WIFI_SERVICE)
-//             .let { it as? WifiManager }
-//
-//        val wifiInfo = wifiMgr.connectionInfo
-//        var ip = wifiInfo.ssid
-//
-//        ip += Formatter.formatIpAddress(wifiInfo.ipAddress)
-//
-//    }
 
 
 }

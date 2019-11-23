@@ -1,6 +1,7 @@
 package com.fmatos.samples.hud.utils.koin
 
 import android.util.Log
+import com.fmatos.samples.hud.DataRepository
 import com.fmatos.samples.hud.MainViewModel
 import com.fmatos.samples.hud.ServoViewModel
 import com.fmatos.samples.hud.io.controller.ServoController
@@ -45,7 +46,7 @@ class KoinModules {
      * Creates all injected objects necessary for activities, fragments and custom views
      */
     private val uiModule = module {
-        viewModel { MainViewModel(get(), get()) }
+        viewModel { MainViewModel(get(), get(), get()) }
         viewModel { ServoViewModel(get()) }
     }
 
@@ -55,6 +56,7 @@ class KoinModules {
     private val domainModule = module {
 
         factory { WallpaperService(get()) }
+        factory { DataRepository(get()) }
 
         /**
          * https://garygregory.wordpress.com/2013/06/18/what-are-the-java-timezone-ids/

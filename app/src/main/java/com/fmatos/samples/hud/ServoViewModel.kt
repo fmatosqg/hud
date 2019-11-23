@@ -14,11 +14,11 @@ import timber.log.Timber
  **/
 class ServoViewModel(private val servoController: ServoController) : ViewModel() {
 
-    private val windowLenght = 4
-    private val windowStart = 44
+    private val windowLength = 5
+    private val windowStart = 3
 
 
-    private val defaultAngle = 120f
+    private val defaultAngle = 170f
 
     init {
         kickoff()
@@ -30,8 +30,6 @@ class ServoViewModel(private val servoController: ServoController) : ViewModel()
             .launch {
 
                 warmUp()
-                sweep()
-                warmUp()
 
                 while (true) {
 
@@ -39,14 +37,6 @@ class ServoViewModel(private val servoController: ServoController) : ViewModel()
                     delay(2_000)
                 }
             }
-    }
-
-    private suspend fun sweep() {
-
-        for (i in 0..240) {
-            delay(100)
-            servoController.setPosition(i.toFloat())
-        }
     }
 
     private suspend fun warmUp() {
@@ -66,16 +56,17 @@ class ServoViewModel(private val servoController: ServoController) : ViewModel()
         val dateTime = DateTime.now()
 
         val minute = dateTime.minuteOfHour().get()
-
+        val elapsedMinute = minute - windowStart
 
         val angle = when {
-            minute >= windowStart + windowLenght -> defaultAngle
-            minute > windowStart ->
+            elapsedMinute >= windowLength -> defaultAngle
+            elapsedMinute < 0 -> defaultAngle
+            else ->
                 proportional(
-                    minute - windowStart,
+                    elapsedMinute,
                     dateTime.secondOfMinute().get()
                 )
-            else -> defaultAngle
+
         }
 
 
@@ -87,7 +78,7 @@ class ServoViewModel(private val servoController: ServoController) : ViewModel()
         val startAngle = 40f
         val endAngle = defaultAngle
 
-        val totalSecondsLength = windowLenght * 60
+        val totalSecondsLength = windowLength * 60
         val elapsedSeconds = minutes * 60 + seconds
 
         val dAngle =
