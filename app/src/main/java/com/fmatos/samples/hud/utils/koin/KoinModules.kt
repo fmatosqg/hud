@@ -2,6 +2,10 @@ package com.fmatos.samples.hud.utils.koin
 
 import android.util.Log
 import com.fmatos.samples.hud.MainViewModel
+import com.fmatos.samples.hud.ServoViewModel
+import com.fmatos.samples.hud.io.controller.ServoController
+import com.fmatos.samples.hud.io.controller.ServoController.Companion.pwm0Pin
+import com.fmatos.samples.hud.io.controller.ServoController.Companion.pwm1Pin
 import com.fmatos.samples.hud.service.WallpaperService
 import com.fmatos.samples.hud.service.model.amazingwallpapers.WallpaperApi
 import com.google.gson.Gson
@@ -42,6 +46,7 @@ class KoinModules {
      */
     private val uiModule = module {
         viewModel { MainViewModel(get(), get()) }
+        viewModel { ServoViewModel(get()) }
     }
 
     /**
@@ -56,6 +61,8 @@ class KoinModules {
          */
         factory { DateTimeZone.forID("Australia/Melbourne") }
 
+        single { ServoController(pwm1Pin) }
+
     }
 
     /**
@@ -63,7 +70,7 @@ class KoinModules {
      */
     private val networkModule = module {
 
-        val SERVER_HOSTNAME = "http://amazingdomain.net/"
+        val SERVER_HOSTNAME = "http://www.amazingdomain.net/"
 
         factory { Gson() }
 

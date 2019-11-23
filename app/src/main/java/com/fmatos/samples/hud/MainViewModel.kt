@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fmatos.samples.hud.io.controller.ServoController
 import com.fmatos.samples.hud.service.WallpaperService
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.delay
@@ -119,7 +120,9 @@ class MainViewModel(
 
 
 //    private fun getWifiIp() {
-//        val wifiMgr = getSystemService(Context.WIFI_SERVICE) as WifiManager
+//         getSystemService(WIFI_SERVICE)
+//             .let { it as? WifiManager }
+//
 //        val wifiInfo = wifiMgr.connectionInfo
 //        var ip = wifiInfo.ssid
 //

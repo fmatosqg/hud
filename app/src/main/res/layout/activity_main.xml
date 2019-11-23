@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.fmatos.samples.hud.MainViewModel" />
+
+        <variable
+            name="servoViewModel"
+            type="com.fmatos.samples.hud.ServoViewModel" />
+    </data>
+
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -29,7 +41,7 @@
             android:background="@color/transparentGray"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="30dp">
+            android:padding="0dp">
 
 
             <FrameLayout
@@ -55,16 +67,15 @@
                 <TextView
                     android:id="@+id/countdown_text"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="40dp"
                     android:background="@color/transparent"
                     android:lines="1"
                     android:paddingTop="10dp"
                     android:textAlignment="center"
-
-                    android:textSize="80sp"
+                    android:textSize="20sp"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeTextType="uniform"
-                    tools:text="1 day to whatever" />
+                    tools:text="1 day to whateverr" />
             </FrameLayout>
 
             <TextView
@@ -90,7 +101,7 @@
             <TextView
                 android:id="@+id/clock_date_text"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:background="@color/transparent"
                 android:lines="1"
                 android:padding="10dp"
@@ -114,10 +125,13 @@
                     android:text="AM"
                     android:textSize="30sp"
                     android:visibility="@{viewModel.am}"
+                    app:layout_constraintBottom_toTopOf="@id/label_pm"
                     app:layout_constraintEnd_toStartOf="@id/clock_time_text"
-                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_bias="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintVertical_chainStyle="packed"
                     tools:visibility="visible" />
 
                 <TextView
@@ -129,7 +143,7 @@
                     android:visibility="@{viewModel.pm}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/clock_time_text"
-                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_bias="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/label_am"
                     tools:visibility="visible" />
@@ -138,20 +152,23 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/clock_time_text"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="160dp"
                     android:fontFamily="@font/dseg7classic_light"
                     android:lines="1"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:text="@{viewModel.time}"
                     android:textAlignment="center"
-                    android:textSize="80sp"
+                    android:textSize="90sp"
                     app:autoSizeMinTextSize="12sp"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeTextType="uniform"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="!7:46" />
+                    tools:text="27:46" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -160,12 +177,5 @@
 
     </FrameLayout>
 
-
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.fmatos.samples.hud.MainViewModel" />
-    </data>
 
 </layout>

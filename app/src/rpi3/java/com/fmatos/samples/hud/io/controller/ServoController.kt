@@ -3,42 +3,48 @@ package com.fmatos.samples.hud.io.controller
 import android.util.Log
 import com.google.android.things.pio.PeripheralManager
 import com.google.android.things.pio.Pwm
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.IOException
 
 /**
  * Created by fabio.goncalves on 23/01/2017.
  */
 
-class ServoController {
+class ServoController(
+    pinName: String,
+    private val periodMs: Float,
+    private val maxTimeMs: Float,
+    private val minTimeMs: Float
+) {
 
-    private lateinit var pin: Pwm
+    private val pin: Pwm
 
-    private val periodMs: Double
-    private val maxTimeMs: Double
-    private val minTimeMs: Double
 
-    private var pulseLenghtMs: Double = 0.toDouble()
+    private var pulseLenghtMs = 0f
 
-    constructor(pin: String) : this(pin, 20.0, 2.5, 0.5)
+    constructor(pin: String) : this(pin, 20f, 2.5f, 0.5f)
 
-    constructor(pin: String, periodMs: Double, maxTimeMs: Double, minTimeMs: Double) {
+    init {
+        val service = PeripheralManager.getInstance()
+        pin = service.openPwm(pinName)
+        setup(pinName)
 
-        this.periodMs = periodMs
-        this.maxTimeMs = maxTimeMs
-        this.minTimeMs = minTimeMs
-
-        setup(pin)
     }
 
     private fun setup(pinName: String) {
         try {
 
-            val service = PeripheralManager.getInstance()
-            pin = service.openPwm(pinName)
 
             pin.setPwmFrequencyHz(1000.0 / periodMs)
-            setPosition(90.0)
+            setPosition(90f)
             pin.setEnabled(true)
+
+
+            Log.i("Servo Controller", "Initialize pin $pinName")
 
         } catch (e: IOException) {
             Log.e("Servo Controller", "Can't initialize pin $pinName")
@@ -50,7 +56,7 @@ class ServoController {
     /**
      * assumes that min position is 0 degrees and max is 180
      */
-    fun setPosition(degrees: Double) {
+    fun setPosition(degrees: Float) {
 
         if (degrees > 90) {
             pulseLenghtMs = minTimeMs
@@ -58,7 +64,7 @@ class ServoController {
             pulseLenghtMs = maxTimeMs
         }
 
-        pulseLenghtMs = degrees / 180.0 * (maxTimeMs - minTimeMs) + minTimeMs
+        pulseLenghtMs = degrees / 180f * (maxTimeMs - minTimeMs) + minTimeMs
 
         if (pulseLenghtMs < minTimeMs) {
             pulseLenghtMs = minTimeMs
@@ -66,12 +72,18 @@ class ServoController {
             pulseLenghtMs = maxTimeMs
         }
 
-        val dutyCycle = pulseLenghtMs / periodMs * 100.0
+        val dutyCycle = pulseLenghtMs / periodMs * 100f
 
-        Log.i(TAG, "Duty cycle = ${dutyCycle.format(2)} pulse lenght = ${pulseLenghtMs.format(2)}")
+        Timber.v(
+            "Degrees %s Duty cycle %s - pulse lenght =  %s",
+            degrees.format(2),
+            dutyCycle.format(2),
+            pulseLenghtMs.format(2)
+        )
+
 
         try {
-            pin.setPwmDutyCycle(dutyCycle)
+            pin.setPwmDutyCycle(dutyCycle.toDouble())
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -91,4 +103,4 @@ class ServoController {
     }
 }
 
-fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
+fun Float.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
